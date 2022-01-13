@@ -18,7 +18,7 @@
     "eject": "react-scripts eject",
     "css-build": "node-sass --omit-source-map-url src/styles/sass/mystyle.scss src/styles/css/mystyle.css",
     "css-watch": "npm run css-build -- --watch",
-    "start-bulma": "npm run css-watch"
+    "css-start": "npm run css-watch"
   },
   "eslintConfig": {
     "extends": [
