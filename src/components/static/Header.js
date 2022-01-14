@@ -11,9 +11,11 @@ const Header = () => {
       </div>
 
 
-      <div 
-        className="column is-flex is-align-items-center is-justify-content-end has-text-white p-0 mt-3 pr-5">
-          DROPDOWN
+      <div
+        className="column is-flex is-align-items-center is-justify-content-center has-text-white is-size-4 mt-3">
+        <button className="button  is-active">
+          <i className="fas fa-bars"></i>
+        </button>
       </div>
 
     </div>
