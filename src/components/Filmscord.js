@@ -1,11 +1,10 @@
 import React from "react";
-import Header from "./static/Header";
+import FilmscordRouter from "./routers/FilmscordRouter";
 
-const Filmscord = () => { 
+const Filmscord = () => {
   return (
     <>
-      <Header/>
-      <h1>Filmscord</h1>
+      <FilmscordRouter />
     </>
   );
 }

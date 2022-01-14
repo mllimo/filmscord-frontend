@@ -1,6 +1,9 @@
-// 'Fredoka One'
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import './colors';
+@import './backgrounds';
+@import './fonts';
+@import './sizing';
+@import './visibility';
 
-.text-font-fredoka {
-  font-family: 'Fredoka One', cursive;
+body, #root {
+  height: 100vh;
 }
