@@ -1,5 +1,6 @@
 import Header from '../static/Header';
-import LoginBox from '../auth/LoginBox';
+import Login from '../auth/Login';
+import Register from '../auth/Register';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 const FilmscordRouter = () => {
@@ -7,8 +8,8 @@ const FilmscordRouter = () => {
     <Router>
       <Header />
         <Routes>
-          <Route path="/" element={<LoginBox />} />
-          <Route path="/signup" element={<LoginBox />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Register />} />
         </Routes>
     </Router>
   );
