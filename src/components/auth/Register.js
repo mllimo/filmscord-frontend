@@ -8,12 +8,12 @@ const Register = () => {
 
   const { form, response, isLoading, isSuccess,
     handleInputChange, handleSubmit }
-    = useForm({ username: "", email: "", password: "" }, URLS + "/api/signup", {
+    = useForm({ username: "", email: "", password: "" }, URLS.BASE_URL + "/api/signup", {
       method: "POST",
     });
 
   const email_ref = useRef();
-  const username_ref = useRef(); 
+  const username_ref = useRef();
   const password_ref = useRef();
   const container_ref = useRef();
   const button_ref = useRef();
@@ -30,7 +30,7 @@ const Register = () => {
         password_ref.current.classList.add("is-danger");
         username_ref.current.placeholder = "incorrect";
       }
-    } else {
+    } else if (response instanceof TypeError) {
       container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
       window.history.pushState({}, undefined, "/ups");
     }
@@ -45,15 +45,14 @@ const Register = () => {
     if (email_ref.current.classList.contains("is-danger")) {
       email_ref.current.classList.remove("is-danger");
     }
-
     return () => { };
   }, [form]);
 
   useEffect(() => {
-    if (button_ref.current.classList.contains("is-loading")) {
-      button_ref.current.classList.remove("is-loading");
-    } else {
+    if (isLoading) {
       button_ref.current.classList.add("is-loading");
+    } else {
+      button_ref.current.classList.remove("is-loading");
     }
   }, [isLoading]);
 
@@ -81,8 +80,8 @@ const Register = () => {
             <div className="control">
               <input className="input"
                 ref={email_ref}
-                name="username"
-                type="text"
+                name="email"
+                type="email"
                 placeholder="e.g. alex@example.com"
                 onChange={handleInputChange}
               />

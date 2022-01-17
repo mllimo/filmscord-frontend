@@ -16,7 +16,6 @@ const Login = () => {
   const button_ref = useRef();
 
   useEffect(() => {
-    console.log('response: ', response)
     if (isSuccess) {
       if (response.status === 200) {
         localStorage.setItem("token", response.token);
@@ -50,7 +49,6 @@ const Login = () => {
       button_ref.current.classList.remove("is-loading");
     }
   }, [isLoading]);
-
 
   return (
     <div className="full-center height-90">

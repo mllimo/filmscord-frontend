@@ -14,6 +14,7 @@ const useForm = (fields, toSend, fetchOptions) => {
     e.preventDefault();
     setIsLoading(true);
     request = { ...fetchOptions, body: JSON.stringify(form) };
+    console.log(request);
     fetch(toSend, request)
       .then((res) => res.json())
       .then((res) => {
