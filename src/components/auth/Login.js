@@ -6,7 +6,7 @@ import URLS from "../../config/config";
 const Login = () => {
 
   const { form, response, isLoading, isSuccess, handleInputChange, handleSubmit } =
-    useForm({ email_username: "", password: "" }, URLS + "/api/login", {
+    useForm({ email_username: "", password: "" }, URLS.BASE_URL + "/api/login", {
       method: "POST",
     });
 
@@ -16,6 +16,7 @@ const Login = () => {
   const button_ref = useRef();
 
   useEffect(() => {
+    console.log('response: ', response)
     if (isSuccess) {
       if (response.status === 200) {
         localStorage.setItem("token", response.token);
@@ -27,7 +28,7 @@ const Login = () => {
         email_username_ref.current.placeholder = "email or username incorrect";
         password_ref.current.placeholder = "password incorrect";
       }
-    } else {
+    } else if (response instanceof TypeError) {
       container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
       window.history.pushState({}, undefined, "/ups");
     }
@@ -43,10 +44,10 @@ const Login = () => {
   }, [form]);
 
   useEffect(() => {
-    if (button_ref.current.classList.contains("is-loading")) {
-      button_ref.current.classList.remove("is-loading");
-    } else {
+    if (isLoading) {
       button_ref.current.classList.add("is-loading");
+    } else {
+      button_ref.current.classList.remove("is-loading");
     }
   }, [isLoading]);
 

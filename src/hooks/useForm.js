@@ -5,15 +5,15 @@ const useForm = (fields, toSend, fetchOptions) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [response, setResponse] = useState({});
-  const [request, setRequest] = useState(fetchOptions);
-
+  let request = fetchOptions;
   const handleInputChange = ({ target }) => {
     setForm({ ...form, [target.name]: target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setRequest({ ...request, body: JSON.stringify(form) });
+    setIsLoading(true);
+    request = { ...fetchOptions, body: JSON.stringify(form) };
     fetch(toSend, request)
       .then((res) => res.json())
       .then((res) => {
