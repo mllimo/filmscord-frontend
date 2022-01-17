@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const useForm = (fields, toSend, fetchOptions) => {
   const [form, setForm] = useState(fields);

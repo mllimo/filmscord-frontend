@@ -1,5 +1,7 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
+import DropDownItem from "../components/DropdownItem";
+import DropDownMenu from "../components/DropdownMenu";
 const Header = () => {
   return (
     <div className="columns has-background-black mb-0">
@@ -13,9 +15,11 @@ const Header = () => {
 
       <div
         className="column is-flex is-align-items-center is-justify-content-center has-text-white is-size-4 mt-3">
-        <button className="button  is-active">
-          <i className="fas fa-bars"></i>
-        </button>
+        <DropDownMenu>
+          <DropDownItem>
+            <Link to="/about">about</Link>
+          </DropDownItem>
+        </DropDownMenu>
       </div>
 
     </div>
