@@ -6,7 +6,7 @@ import URLS from "../../config/config";
 const Login = () => {
 
   const { form, response, isLoading, isSuccess, handleInputChange, handleSubmit } =
-    useForm({ email_username: "", password: "" }, URLS.BASE_URL + "/api/login", {
+    useForm({ email_username: "", password: "" }, URLS.BASE_URL + "/api/auth/login", {
       method: "POST",
     });
 
@@ -31,7 +31,6 @@ const Login = () => {
       container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
       window.history.pushState({}, undefined, "/ups");
     }
-    return () => { };
   }, [response, isSuccess]);
 
   useEffect(() => {
@@ -39,7 +38,6 @@ const Login = () => {
       email_username_ref.current.classList.remove("is-danger");
       password_ref.current.classList.remove("is-danger");
     }
-    return () => { };
   }, [form]);
 
   useEffect(() => {

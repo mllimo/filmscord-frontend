@@ -13,7 +13,13 @@ const useForm = (fields, toSend, fetchOptions) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    request = { ...fetchOptions, body: JSON.stringify(form) };
+    request = {
+      ...fetchOptions,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form)
+    };
     console.log(request);
     fetch(toSend, request)
       .then((res) => res.json())

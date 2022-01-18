@@ -8,7 +8,7 @@ const Register = () => {
 
   const { form, response, isLoading, isSuccess,
     handleInputChange, handleSubmit }
-    = useForm({ username: "", email: "", password: "" }, URLS.BASE_URL + "/api/signup", {
+    = useForm({ username: "", email: "", password: "" }, URLS.BASE_URL + "/api/auth/signup", {
       method: "POST",
     });
 
