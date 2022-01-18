@@ -26,10 +26,20 @@ const Register = () => {
         container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
         window.history.pushState({}, undefined, "/" + response.body.username);
       } else if (response.status === 422) {
-        username_ref.current.classList.add("is-danger");
-        email_ref.current.classList.add("is-danger");
-        password_ref.current.classList.add("is-danger");
-        username_ref.current.placeholder = "incorrect";
+        for (const error of response.body.errors) {
+          if (error.param === "email") {
+            email_ref.current.classList.add("is-danger");
+          }
+
+          if (error.param === "username") {
+            username_ref.current.classList.add("is-danger");
+          }
+
+          if (error.param === "password") {
+            password_ref.current.classList.add("is-danger");
+
+          }
+        }
       }
     } else if (response instanceof TypeError) {
       container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
