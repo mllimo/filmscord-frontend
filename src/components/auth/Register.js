@@ -20,11 +20,12 @@ const Register = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      console.log(response);
       if (response.status === 200) {
-        localStorage.setItem("token", response.token);
+        localStorage.setItem("token", response.body.token);
         container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
-        window.history.pushState({}, undefined, "/" + response.username);
-      } else if (response.status === 400) {
+        window.history.pushState({}, undefined, "/" + response.body.username);
+      } else if (response.status === 422) {
         username_ref.current.classList.add("is-danger");
         email_ref.current.classList.add("is-danger");
         password_ref.current.classList.add("is-danger");

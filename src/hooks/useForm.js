@@ -12,6 +12,7 @@ const useForm = (fields, toSend, fetchOptions) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     setIsLoading(true);
     request = {
       ...fetchOptions,
@@ -20,9 +21,14 @@ const useForm = (fields, toSend, fetchOptions) => {
       },
       body: JSON.stringify(form)
     };
+
     console.log(request);
     fetch(toSend, request)
-      .then((res) => res.json())
+      .then(async (res) => {
+        const body = (await res.json());
+        const resObj = {status: res.status, body};
+        return resObj;
+      })
       .then((res) => {
         setResponse(res);
         setIsLoading(false);
