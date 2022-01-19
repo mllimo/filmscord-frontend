@@ -41,8 +41,11 @@ const Register = () => {
       console.log(response);
       if (response.status === 200) {
         localStorage.setItem("token", response.body.token);
-        container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
-        navigate("/" + userContext.username, { replace: true });
+        container_ref.current.classList.add("animate__bounceOutDown");
+        setTimeout(() => {
+          navigate("/" + userContext.username, { replace: true });
+          container_ref.current.classList.remove("animate__bounceOutDown");
+        }, 500);
         //window.history.pushState({}, undefined, "/" + response.body.username);
       } else if (response.status === 422) {
         for (const error of response.body.errors) {
@@ -59,8 +62,10 @@ const Register = () => {
       }
     } else if (response instanceof TypeError) {
       container_ref.current.classList.add("animate__bounceOutDown");
-      container_ref.current.classList.remove("animate__bounceOutDown");
-      navigate("/ups", { replace: true });
+      setTimeout(() => {
+        navigate("/ups", { replace: true });
+        container_ref.current.classList.remove("animate__bounceOutDown");
+      }, 500);
       //window.history.pushState({}, undefined, "/ups");
     }
     return () => { };

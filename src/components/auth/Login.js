@@ -39,7 +39,11 @@ const Login = () => {
       if (response.status === 200) {
         localStorage.setItem("token", response.body.token);
         container_ref.current.classList.add("animate__bounceOutDown");
-        window.history.pushState({}, undefined, "/" + response.body.username);
+        setTimeout(() => {
+          navigate("/" + userContext.username, { replace: true });
+          container_ref.current.classList.remove("animate__bounceOutDown");
+        }, 500);
+        //window.history.pushState({}, undefined, "/" + response.body.username);
       } else if (response.status === 422) {
         email_username_ref.current.classList.add("is-danger");
         password_ref.current.classList.add("is-danger");
@@ -48,7 +52,11 @@ const Login = () => {
       }
     } else if (response instanceof TypeError) {
       container_ref.current.classList.add("animate__bounceOutDown");
-      window.history.pushState({}, undefined, "/ups");
+      setTimeout(() => {
+        navigate("/ups", { replace: true });
+        container_ref.current.classList.remove("animate__bounceOutDown");
+      }, 500);
+      //window.history.pushState({}, undefined, "/ups");
     }
   }, [response, isSuccess]);
 
