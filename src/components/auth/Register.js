@@ -18,14 +18,17 @@ const Register = () => {
 
   // Actualizar el estado del usuario
   const handleRegister = () => {
-    const action = {
-      type: types.login,
-      payload: {
-        username: form.username,
-        logged: isSuccess,
-      }
-    };
-    userContext.dispatch(action);
+    if (isSuccess) {
+      const action = {
+        type: types.login,
+        payload: {
+          username: form.username,
+          logged: isSuccess,
+          token: response.body.token,
+        }
+      };
+      userContext.dispatch(action);
+    }
   }
 
   const email_ref = useRef();
@@ -40,7 +43,6 @@ const Register = () => {
     if (isSuccess) {
       console.log(response);
       if (response.status === 200) {
-        localStorage.setItem("token", response.body.token);
         container_ref.current.classList.add("animate__bounceOutDown");
         setTimeout(() => {
           navigate("/" + userContext.username, { replace: true });

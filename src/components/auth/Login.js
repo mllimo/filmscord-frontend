@@ -17,14 +17,17 @@ const Login = () => {
     });
 
   const handleLogin = () => {
-    const action = {
-      type: types.login,
-      payload: {
-        username: form.email_username,
-        logged: isSuccess,
-      }
-    };
-    userContext.dispatch(action);
+    if (isSuccess) {
+      const action = {
+        type: types.login,
+        payload: {
+          username: form.email_username,
+          logged: isSuccess,
+          token: response.body.token,
+        }
+      };
+      userContext.dispatch(action);
+    }
   };
 
   const email_username_ref = useRef();
@@ -37,7 +40,6 @@ const Login = () => {
     handleLogin();
     if (isSuccess) {
       if (response.status === 200) {
-        localStorage.setItem("token", response.body.token);
         container_ref.current.classList.add("animate__bounceOutDown");
         setTimeout(() => {
           navigate("/" + userContext.username, { replace: true });
