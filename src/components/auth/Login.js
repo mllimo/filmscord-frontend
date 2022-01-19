@@ -1,22 +1,40 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
+import AuthContext from "../../auth/authContext";
+import { useNavigate } from "react-router-dom";
 import useForm from "../../hooks/useForm";
 import { Link } from "react-router-dom";
 import URLS from "../../config/config";
+import types from "../../types/types";
 
 
 const Login = () => {
+  const userContext = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const { form, response, isLoading, isSuccess, handleInputChange, handleSubmit } =
     useForm({ email_username: "", password: "" }, URLS.BASE_URL + "/api/auth/login", {
       method: "POST",
     });
 
+  const handleLogin = () => {
+    const action = {
+      type: types.login,
+      payload: {
+        username: form.email_username,
+        logged: isSuccess,
+      }
+    };
+    userContext.dispatch(action);
+  };
+
   const email_username_ref = useRef();
   const password_ref = useRef();
   const container_ref = useRef();
   const button_ref = useRef();
 
+  // Observamos si el usuario se ha podido loguear
   useEffect(() => {
+    handleLogin();
     if (isSuccess) {
       if (response.status === 200) {
         localStorage.setItem("token", response.body.token);
@@ -34,6 +52,7 @@ const Login = () => {
     }
   }, [response, isSuccess]);
 
+  // Observamos los cambios del formulario para quitar las clases de error
   useEffect(() => {
     if (email_username_ref.current.classList.contains("is-danger")) {
       email_username_ref.current.classList.remove("is-danger");
@@ -41,6 +60,7 @@ const Login = () => {
     }
   }, [form]);
 
+  // Observamos si sigue en curso la peticion de logueo
   useEffect(() => {
     if (isLoading) {
       button_ref.current.classList.add("is-loading");
