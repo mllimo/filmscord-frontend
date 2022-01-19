@@ -3,6 +3,7 @@ import useForm from "../../hooks/useForm";
 import { Link } from "react-router-dom";
 import URLS from "../../config/config";
 
+
 const Login = () => {
 
   const { form, response, isLoading, isSuccess, handleInputChange, handleSubmit } =
@@ -19,7 +20,7 @@ const Login = () => {
     if (isSuccess) {
       if (response.status === 200) {
         localStorage.setItem("token", response.body.token);
-        container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
+        container_ref.current.classList.add("animate__bounceOutDown");
         window.history.pushState({}, undefined, "/" + response.body.username);
       } else if (response.status === 422) {
         email_username_ref.current.classList.add("is-danger");
@@ -28,7 +29,7 @@ const Login = () => {
         password_ref.current.placeholder = "password incorrect";
       }
     } else if (response instanceof TypeError) {
-      container_ref.current.classList.add("animate__animated", "animate__bounceOutDown");
+      container_ref.current.classList.add("animate__bounceOutDown");
       window.history.pushState({}, undefined, "/ups");
     }
   }, [response, isSuccess]);
