@@ -1,3 +1,10 @@
+.full-center {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .is-full-height {
   height: 100%;
 }
@@ -10,9 +17,35 @@
   height: 90%;
 }
 
-.full-center {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+.width-90 {
+  width: 90%;
 }
+
+.increase-rem-1 {
+  height: 1rem;
+  width: 1rem;
+}
+
+.increase-rem-2 {
+  height: 2rem;
+  width: 2rem;
+}
+
+.height-rem-1 {
+  height: 1rem;
+}
+
+.width-rem-1 {
+  width: 1rem;
+}
+
+.height-rem-2{
+  height: 2rem;
+}
+
+.width-rem-2 {
+  width: 2rem;
+}
+
+
+
