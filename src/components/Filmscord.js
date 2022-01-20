@@ -4,11 +4,7 @@ import authReducer from "../auth/authReducer";
 import AuthContext from "../auth/authContext";
 
 const init = () => {
-  return localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {
-    logged: false,
-    username: "",
-    token: "",
-  }
+  return JSON.parse( localStorage.getItem('user') ) || { logged: false, username: "", token: "" };
 }
 
 const Filmscord = () => {
