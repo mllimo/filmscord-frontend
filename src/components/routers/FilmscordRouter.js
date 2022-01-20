@@ -4,6 +4,7 @@ import Register from '../auth/Register';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import UserScreen from '../screens/UserScreen';
 
 const FilmscordRouter = () => {
   //<UserRoute />
@@ -26,11 +27,14 @@ const FilmscordRouter = () => {
           </PublicRoute>
         } />
 
-        <Route path="/*" element={
+        <Route path="/:username" element={
           <PrivateRoute>
+            <UserScreen />
           </PrivateRoute>
         }
         />
+
+
       </Routes>
     </Router>
   );
