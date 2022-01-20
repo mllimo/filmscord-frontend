@@ -27,7 +27,7 @@ const FilmscordRouter = () => {
           </PublicRoute>
         } />
 
-        <Route path="/:username" element={
+        <Route path="/user/:username" element={
           <PrivateRoute>
             <UserScreen />
           </PrivateRoute>

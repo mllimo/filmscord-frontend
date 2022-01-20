@@ -45,7 +45,7 @@ const Register = () => {
       if (response.status === 200) {
         container_ref.current.classList.add("animate__bounceOutDown");
         setTimeout(() => {
-          navigate("/" + userContext.username, { replace: true });
+          navigate("/user/" + userContext.username, { replace: true });
           container_ref.current.classList.remove("animate__bounceOutDown");
         }, 500);
         //window.history.pushState({}, undefined, "/" + response.body.username);
