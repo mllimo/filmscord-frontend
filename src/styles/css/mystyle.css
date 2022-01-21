@@ -7902,3 +7902,13 @@ body, #root {
   border-radius: 0.6rem;
   padding: 1rem;
   width: 30rem; }
+
+.card-size {
+  overflow: hidden;
+  height: 20rem;
+  width: 15rem; }
+
+.card-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; }
