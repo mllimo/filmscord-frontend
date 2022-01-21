@@ -15,11 +15,6 @@ const Header = () => {
 
       <div
         className="column is-flex is-align-items-center is-justify-content-center has-text-white is-size-4 mt-3">
-        <DropDownMenu>
-          <DropDownItem>
-            <Link to="/about">about</Link>
-          </DropDownItem>
-        </DropDownMenu>
       </div>
 
     </div>
