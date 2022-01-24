@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect} from "react";
 import URL from "../../config/config";
 import useFetch from "../../hooks/useFetch";
 import AuthContext from "../../auth/authContext";
 import OptionMenu from "../components/OptionMenu";
 import useOptions from "../../hooks/useOptions";
 import ContentList from "../components/ContentList";
-import contentReducer from "../../hooks/contentReducer";
 import types from "../../types/types";
+import ContentContext from "../../content/contentContext";
 import LoadingBar from "../components/LoadingBar";
 
 
@@ -20,7 +20,7 @@ const defaultOptions = {
 const UserScreen = () => {
 
   const options = useOptions(defaultOptions);
-  const [contents, dispatch] = useReducer(contentReducer, []);
+  const contentContext = useContext(ContentContext);
 
   const { user } = useContext(AuthContext);
   const url = URL.BASE_URL + URL.API_USER + "/" + user.username;
@@ -36,7 +36,7 @@ const UserScreen = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch({ type: types.add, payload: data.contents });
+      contentContext.dispatch({ type: types.add, payload: data.contents });
     }
   }, [isSuccess]);
 
@@ -53,7 +53,7 @@ const UserScreen = () => {
           {
             isLoading
               ? loadingBar
-              : <ContentList contentReducer={{ contents, dispatch }} />
+              : <ContentList contentReducer={{ contents: contentContext.contents, dispatch: contentContext.dispatch }} />
           }
         </div>
 
