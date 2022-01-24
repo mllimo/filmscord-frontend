@@ -7906,7 +7906,9 @@ body, #root {
 .card-size {
   overflow: hidden;
   height: 20rem;
-  width: 15rem; }
+  width: 15rem;
+  max-width: 15rem;
+  max-height: 20rem; }
 
 .card-grid {
   display: flex;

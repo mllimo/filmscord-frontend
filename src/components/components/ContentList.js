@@ -9,8 +9,8 @@ const ContentList = (props) => {
         {
           contents != undefined
             ? contents.map((content, index) => (
-              <div className="is-flex">
-              <Content key={index} info={content.info} />
+              <div key={index}>
+              <Content info={content.info} />
               </div>
             ))
             : emptyList 

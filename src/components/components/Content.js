@@ -3,9 +3,10 @@ import React from "react";
 const Content = ({info}) => {
   console.log(info)
   return (
-    <div className="card mb-5">
+
+    <div className="card card-size mb-5">
       <div className="card-image">
-        <figure className="image card-size">
+        <figure className="image">
           <img src={info.cover} alt="Cover" />
         </figure>
       </div>
