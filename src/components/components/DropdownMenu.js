@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 
-const DropDownMenu = ({ children }) => {
+const DropDownMenu = ({ children, className }) => {
   const childs = [children];
 
   const [isOpen, setIsOpen] = useState(false);
@@ -11,42 +11,31 @@ const DropDownMenu = ({ children }) => {
   const handleClick = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
     if (isOpen) {
       dropdownRef.current.classList.add("is-active");
     } else {
       dropdownRef.current.classList.remove("is-active");
     }
-  };
+  }, [isOpen]);
 
 
   return (
-    <div className="dropdown animate__animated"
-      ref={dropdownRef}
-    >
+    <div className={"dropdown is-right " + className} ref={dropdownRef}>
       <div className="dropdown-trigger">
-        <button className="button" aria-haspopup="true" aria-controls="dropdown-menu2"
-          ref={buttonRef}
-          onClick={handleClick}
-        >
+        <button className="button" aria-haspopup="true" aria-controls="dropdown-menu3" onClick={handleClick}>
           <span className="icon is-small">
-            <i className="fas fa-bars" aria-hidden="true"></i>
+          <i className="fas fa-ellipsis-h"></i>
           </span>
         </button>
-
-        <div className="dropdown-menu" id="dropdown-menu2" role="menu">
-          <div className="dropdown-content">
-            {
-              childs.map((child, index) => {
-                return (
-                  <div key={index}>
-                    {child}
-                  </div>
-                )
-              })
-            }
-          </div>
+      </div>
+      <div className="dropdown-menu" id="dropdown-menu3" role="menu">
+        <div className="dropdown-content">
+          {childs}
         </div>
-      </div >
+      </div>
     </div>
   );
 }
