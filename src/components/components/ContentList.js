@@ -5,13 +5,11 @@ const ContentList = (props) => {
   const { contents, dispatch } = props.contentReducer;
 
   return (
-    <div className="card-grid is-flex is-align-items-center is-justify-content-space-between mr-6">
+    <div className="card-grid is-flex is-align-items-center is-justify-content-space-evenly mr-6">
         {
           contents != undefined
             ? contents.map((content, index) => (
-              <div key={index}>
-              <Content info={content.info} />
-              </div>
+              <Content key={index} info={content.info} />
             ))
             : emptyList 
         }

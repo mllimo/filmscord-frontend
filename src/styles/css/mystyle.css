@@ -7894,6 +7894,9 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 .has-overflow-hidden {
   overflow: hidden; }
 
+.has-overflow-scroll {
+  overflow: scroll; }
+
 body, #root {
   height: 100vh; }
 
@@ -7905,10 +7908,10 @@ body, #root {
 
 .card-size {
   overflow: hidden;
-  height: 20rem;
-  width: 15rem;
-  max-width: 15rem;
-  max-height: 20rem; }
+  height: 25rem;
+  width: 20rem;
+  max-width: 20rem;
+  max-height: 25rem; }
 
 .card-grid {
   display: flex;
