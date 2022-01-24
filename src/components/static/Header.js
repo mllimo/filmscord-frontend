@@ -10,7 +10,6 @@ const Header = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(userContext.user);
     if (userContext.user.logged) {
       userContext.dispatch({
         type: types.logout,

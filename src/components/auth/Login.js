@@ -8,6 +8,11 @@ import types from "../../types/types";
 
 
 const Login = () => {
+  const email_username_ref = useRef();
+  const password_ref = useRef();
+  const container_ref = useRef();
+  const button_ref = useRef();
+
   const userContext = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -22,7 +27,6 @@ const Login = () => {
         type: types.login,
         payload: {
           username: form.email_username,
-          logged: isSuccess,
           token: response.body.token,
         }
       };
@@ -30,22 +34,13 @@ const Login = () => {
     }
   };
 
-  const email_username_ref = useRef();
-  const password_ref = useRef();
-  const container_ref = useRef();
-  const button_ref = useRef();
-
   // Observamos si el usuario se ha podido loguear
   useEffect(() => {
     handleLogin();
     if (isSuccess) {
       if (response.status === 200) {
         container_ref.current.classList.add("animate__bounceOutDown");
-        setTimeout(() => {
-          navigate("/user/" + userContext.username, { replace: true });
-          container_ref.current.classList.remove("animate__bounceOutDown");
-        }, 500);
-        //window.history.pushState({}, undefined, "/" + response.body.username);
+        navigate("/user/" + userContext.user.username, { replace: true });
       } else if (response.status === 422) {
         email_username_ref.current.classList.add("is-danger");
         password_ref.current.classList.add("is-danger");
@@ -54,11 +49,7 @@ const Login = () => {
       }
     } else if (response instanceof TypeError) {
       container_ref.current.classList.add("animate__bounceOutDown");
-      setTimeout(() => {
-        navigate("/ups", { replace: true });
-        container_ref.current.classList.remove("animate__bounceOutDown");
-      }, 500);
-      //window.history.pushState({}, undefined, "/ups");
+      navigate("/ups", { replace: true });
     }
   }, [response, isSuccess]);
 

@@ -10,6 +10,12 @@ const Register = () => {
   const userContext = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const email_ref = useRef();
+  const username_ref = useRef();
+  const password_ref = useRef();
+  const container_ref = useRef();
+  const button_ref = useRef();
+
   const { form, response, isLoading, isSuccess,
     handleInputChange, handleSubmit }
     = useForm({ username: "", email: "", password: "" }, URLS.BASE_URL + "/api/auth/signup", {
@@ -23,19 +29,12 @@ const Register = () => {
         type: types.login,
         payload: {
           username: form.username,
-          logged: isSuccess,
           token: response.body.token,
         }
       };
       userContext.dispatch(action);
     }
   }
-
-  const email_ref = useRef();
-  const username_ref = useRef();
-  const password_ref = useRef();
-  const container_ref = useRef();
-  const button_ref = useRef();
 
   // Observamos si el usuario se ha podido restistrar
   useEffect(() => {
@@ -44,11 +43,7 @@ const Register = () => {
       console.log(response);
       if (response.status === 200) {
         container_ref.current.classList.add("animate__bounceOutDown");
-        setTimeout(() => {
-          navigate("/user/" + userContext.username, { replace: true });
-          container_ref.current.classList.remove("animate__bounceOutDown");
-        }, 500);
-        //window.history.pushState({}, undefined, "/" + response.body.username);
+        navigate("/user/" + userContext.user.username, { replace: true });
       } else if (response.status === 422) {
         for (const error of response.body.errors) {
           if (error.param === "email") {
@@ -64,11 +59,6 @@ const Register = () => {
       }
     } else if (response instanceof TypeError) {
       container_ref.current.classList.add("animate__bounceOutDown");
-      setTimeout(() => {
-        navigate("/ups", { replace: true });
-        container_ref.current.classList.remove("animate__bounceOutDown");
-      }, 500);
-      //window.history.pushState({}, undefined, "/ups");
     }
     return () => { };
   }, [response, isSuccess]);
