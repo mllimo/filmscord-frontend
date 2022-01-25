@@ -4,6 +4,11 @@ const types = {
   add: 'add',
   remove: 'remove',
   update: 'update',
+  sort: 'sort',
+  sortAsc: 'asc',
+  sortDesc: 'desc',
+  rating: 'rating',
+  runtime: 'runtime',
 };
 
 export default types;

@@ -40,8 +40,10 @@ const UserScreen = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    console.log(options.options);
-  } , [options.options]);
+    console.log(options);
+    contentContext.dispatch({ type: types.sort, payload: {by: options.options.sortBy} });
+    console.log('ordenando', contentContext.contents)
+  } , [options.options.sortBy, options.options.orderBy]);
 
 
 
