@@ -5,8 +5,8 @@ const types = {
   remove: 'remove',
   update: 'update',
   sort: 'sort',
-  sortAsc: 'asc',
-  sortDesc: 'desc',
+  asc: 'asc',
+  desc: 'desc',
   rating: 'rating',
   runtime: 'runtime',
 };

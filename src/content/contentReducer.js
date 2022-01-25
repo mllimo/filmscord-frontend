@@ -11,15 +11,24 @@ const contentReducer = (state = [], action) => {
     case types.update:
       return state;
 
+    // TODO: refac
     case types.sort:
-      console.log('by', action.payload.by);
-        if (action.payload.by === types.rating) {
-          console.log('ntyhtyj');
-          return state.slice().sort((a, b) => a.info.rating - b.info.rating);
-        } else if (action.payload.by === types.runtime) {
-          console.log('asdasd');
-          return state.slice().sort((a, b) => a.info.runtime - b.info.runtime);
+      if (action.payload.by === types.rating) {
+        if (action.payload.in === types.asc) {
+          return state.sort((a, b) => a.info.rating - b.info.rating);
+        } else {
+          return state.sort((a, b) => b.info.rating - a.info.rating);
         }
+      } else if (action.payload.by === types.runtime) {
+        if (action.payload.in === types.asc) {
+          console.log('a', state.sort((a, b) => a.info.runtime - b.info.runtime));
+          return state.sort((a, b) => a.info.runtime - b.info.runtime);
+        } else {
+          console.log('b', state.slice().sort((a, b) => b.info.runtime - a.info.runtime));
+          return state.slice().sort((a, b) => b.info.runtime - a.info.runtime);
+        }
+      }
+      console.log('c');
       break;
 
     default:

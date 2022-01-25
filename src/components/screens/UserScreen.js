@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import URL from "../../config/config";
 import useFetch from "../../hooks/useFetch";
 import AuthContext from "../../auth/authContext";
@@ -11,8 +11,8 @@ import LoadingBar from "../components/LoadingBar";
 
 const defaultOptions = {
   isAdd: false,
-  sortBy: "",
-  orderBy: "",
+  sortBy: types.rating,
+  orderBy: types.asc,
   search: "",
 };
 
@@ -20,7 +20,6 @@ const UserScreen = () => {
 
   const options = useOptions(defaultOptions);
   const contentContext = useContext(ContentContext);
-
   const { user } = useContext(AuthContext);
   const url = URL.BASE_URL + URL.API_USER + "/" + user.username;
 
@@ -36,14 +35,24 @@ const UserScreen = () => {
   useEffect(() => {
     if (isSuccess) {
       contentContext.dispatch({ type: types.add, payload: data.contents });
+      contentContext.dispatch({
+        type: types.sort, payload: {
+          by: options.options.sortBy,
+          in: options.options.orderBy
+        }
+      });
     }
   }, [isSuccess]);
 
   useEffect(() => {
     console.log(options);
-    contentContext.dispatch({ type: types.sort, payload: {by: options.options.sortBy} });
-    console.log('ordenando', contentContext.contents)
-  } , [options.options.sortBy, options.options.orderBy]);
+    contentContext.dispatch({
+      type: types.sort, payload: {
+        by: options.options.sortBy,
+        in: options.options.orderBy
+      }
+    });
+  }, [options.options.sortBy, options.options.orderBy]);
 
 
 
