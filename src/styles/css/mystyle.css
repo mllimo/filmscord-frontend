@@ -7862,6 +7862,9 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 .is-full-height {
   height: 100%; }
 
+.is-full-width {
+  width: 100%; }
+
 .is-full-height-vh {
   height: 100vh; }
 

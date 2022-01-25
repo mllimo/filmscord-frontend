@@ -40,7 +40,7 @@ const UserScreen = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    console.log('cam');
+    console.log(options.options);
   } , [options.options]);
 
 

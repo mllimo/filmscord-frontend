@@ -6,7 +6,10 @@ const OptionMenu = ({ options }) => {
 
   return (
     <div>
-      <div className="button is-flex is-justify-content-center">
+      <div className="button is-flex is-justify-content-center is-full-width"
+        name="isAdd"
+        onClick={() => options.changeOptions({ target: { name: "isAdd" } })}
+      >
         {addIcon}
       </div>
 
