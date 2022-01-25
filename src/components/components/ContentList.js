@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useContext} from "react";
+import ContentContext from "../../content/contentContext";
 import Content from "./Content";
 
-const ContentList = (props) => {
-  const { contents, dispatch } = props.contentReducer;
+const ContentList = () => {
+  const { contents } = useContext(ContentContext);
 
   return (
     <div className="card-grid is-flex is-align-items-center is-justify-content-space-evenly mr-6">

@@ -10,7 +10,7 @@ const useOptions = (initialState = {}) => {
         [option.target.name]: option.target.value,
       });
     } else {
-      setOptions(...options, [option.target.name] = option.target.value);
+      setOptions({...options, [option.target.name]: option.target.value});
     }
   };
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 const Content = ({ info }) => {
-  console.log(info)
+
   return (
     <div className="column is-one-quarter">
       <div className="card mb-5">

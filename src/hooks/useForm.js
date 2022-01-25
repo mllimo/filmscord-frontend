@@ -22,7 +22,6 @@ const useForm = (fields, toSend, fetchOptions) => {
       body: JSON.stringify(form)
     };
 
-    console.log(request);
     fetch(toSend, request)
       .then(async (res) => {
         const body = (await res.json());

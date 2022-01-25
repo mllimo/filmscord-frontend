@@ -9,7 +9,6 @@ import types from "../../types/types";
 import ContentContext from "../../content/contentContext";
 import LoadingBar from "../components/LoadingBar";
 
-
 const defaultOptions = {
   isAdd: false,
   sortBy: "",
@@ -40,6 +39,11 @@ const UserScreen = () => {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    console.log('cam');
+  } , [options.options]);
+
+
 
   return (
     <div className="mt-5">
@@ -53,7 +57,7 @@ const UserScreen = () => {
           {
             isLoading
               ? loadingBar
-              : <ContentList contentReducer={{ contents: contentContext.contents, dispatch: contentContext.dispatch }} />
+              : <ContentList />
           }
         </div>
 

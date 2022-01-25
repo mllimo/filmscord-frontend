@@ -40,7 +40,6 @@ const Register = () => {
   useEffect(() => {
     handleRegister();
     if (isSuccess) {
-      console.log(response);
       if (response.status === 200) {
         container_ref.current.classList.add("animate__bounceOutDown");
         navigate("/user/" + userContext.user.username, { replace: true });

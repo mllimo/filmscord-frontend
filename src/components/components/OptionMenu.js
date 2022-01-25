@@ -1,6 +1,6 @@
 import React from "react";
 
-const OptionMenu = ({ options, changeOptions }) => {
+const OptionMenu = ({ options }) => {
   const backIcon = (<i className="fas fa-caret-square-left is-size-2"></i>);
   const addIcon = (<i className="fas fa-plus-square is-size-2"></i>);
 
@@ -17,7 +17,7 @@ const OptionMenu = ({ options, changeOptions }) => {
             <label className="label">Sort by</label>
             <div className="control">
               <div className="select is-fullwidth">
-                <select name="sortBy" onChange={changeOptions}>
+                <select name="sortBy" onChange={options.changeOptions}>
                   <option value="rating">Rating</option>
                   <option value="runtime">Runtime</option>
                 </select>
@@ -29,7 +29,7 @@ const OptionMenu = ({ options, changeOptions }) => {
             <label className="label">Order by</label>
             <div className="control">
               <div className="select is-fullwidth">
-                <select name="orderBy" onChange={changeOptions}>
+                <select name="orderBy" onChange={options.changeOptions}>
                   <option value="asc">Ascending</option>
                   <option value="desc">Descending</option>
                 </select>
@@ -46,7 +46,7 @@ const OptionMenu = ({ options, changeOptions }) => {
               name="search"
               type="text"
               placeholder="Spiderman"
-              onChange={changeOptions}
+              onChange={options.changeOptions}
             />
           </div>
         </div>
