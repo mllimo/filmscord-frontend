@@ -26,7 +26,7 @@ const Login = () => {
       const action = {
         type: types.login,
         payload: {
-          username: form.email_username,
+          username: response.body.username,
           token: response.body.token,
         }
       };
