@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import URL from "../../config/config";
 import useFetch from "../../hooks/useFetch";
 import AuthContext from "../../auth/authContext";
@@ -17,11 +17,14 @@ const defaultOptions = {
 };
 
 const UserScreen = () => {
-
   const options = useOptions(defaultOptions);
   const contentContext = useContext(ContentContext);
   const { user } = useContext(AuthContext);
+  const [actualContent, setActualContent] = useState([]);
   const url = URL.BASE_URL + URL.API_USER + "/" + user.username;
+
+  // Solucion temporal para que se renderice el componente por actualizacion
+  const [ change, setChange ] = useState(false); 
 
   // Recibir informacion del usuario
   const { data, isLoading, isSuccess } = useFetch(url, {
@@ -45,14 +48,24 @@ const UserScreen = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    console.log(options);
+    setActualContent(contentContext.contents);
+  }, [contentContext.contents]);
+
+  useEffect(() => {
     contentContext.dispatch({
       type: types.sort, payload: {
         by: options.options.sortBy,
         in: options.options.orderBy
       }
     });
+    setChange(!change);
   }, [options.options.sortBy, options.options.orderBy]);
+
+  useEffect(() => {
+    const regex = new RegExp(options.options.search.toLowerCase());
+    const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
+    setActualContent(filtered);
+  }, [options.options.search]);
 
 
 
@@ -68,10 +81,11 @@ const UserScreen = () => {
           {
             isLoading
               ? loadingBar
-              : <ContentList />
+              : <ContentList contents={actualContent} />
           }
         </div>
 
+        <div name={`${change}`}></div>
       </div>
     </div>
   );

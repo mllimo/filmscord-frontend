@@ -4,7 +4,6 @@ const useOptions = (initialState = {}) => {
   const [options, setOptions] = useState(initialState);
 
   const changeOptions = (option) => {
-    console.log(option);
     if (option.target.name === "isAdd") {
       setOptions({ ...options, isAdd: !options.isAdd });
     } else {

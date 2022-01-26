@@ -2,8 +2,7 @@ import React, {useContext} from "react";
 import ContentContext from "../../content/contentContext";
 import Content from "./Content";
 
-const ContentList = () => {
-  const { contents } = useContext(ContentContext);
+const ContentList = ({contents}) => {
 
   return (
     <div className="card-grid is-flex is-align-items-center is-justify-content-space-evenly mr-6">
