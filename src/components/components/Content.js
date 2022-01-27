@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import OptionsContext from "../../contexts/optionsContext";
 
 const Content = ({ info }) => {
-
+  const optionContext = useContext(OptionsContext);
   return (
     <div className="column is-one-quarter">
       <div className="card mb-5">
@@ -20,15 +21,28 @@ const Content = ({ info }) => {
 
           <footer className="card-footer">
             {
-              <a href="#" className="card-footer-item">Edit</a>
-
+              optionContext.options.isAdd
+                ? addCardOptions
+                : normalCardOptions
             }
-            <a href="#" className="card-footer-item">Delete</a>
           </footer>
         </div>
       </div>
     </div>
   );
 }
+
+const addCardOptions = (
+  <>
+    <a href="#" className="card-footer-item">Add</a>
+  </>
+);
+
+const normalCardOptions = (
+  <>
+    <a href="#" className="card-footer-item">Edit</a>
+    <a href="#" className="card-footer-item">Delete</a>
+  </>
+);
 
 export default Content;

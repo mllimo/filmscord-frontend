@@ -10,7 +10,7 @@ import ContentContext from "../../contexts/contentContext";
 import LoadingBar from "../components/LoadingBar";
 import OptionsContext from "../../contexts/optionsContext";
 
-
+// Refactor
 const UserScreen = () => {
   const options = useContext(OptionsContext);
   const contentContext = useContext(ContentContext);
@@ -42,10 +42,12 @@ const UserScreen = () => {
     }
   }, [isSuccess]);
 
+  // Actualizar el contenido
   useEffect(() => {
     setActualContent(contentContext.contents);
   }, [contentContext.contents]);
 
+  // Ordenar el contenido
   useEffect(() => {
     contentContext.dispatch({
       type: types.sort, payload: {
@@ -56,11 +58,26 @@ const UserScreen = () => {
     setChange(!change);
   }, [options.options.sortBy, options.options.orderBy]);
 
+  // Buscar contenido
   useEffect(() => {
     const regex = new RegExp(options.options.search.toLowerCase());
-    const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
-    setActualContent(filtered);
+    if (!options.options.isAdd) {
+      // Buscar por titulo en nuestro backend para mantener segura las api key
+      // Meter los contenidos que coincidan con la busqueda en ActualContent
+    } else {
+      const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
+      setActualContent(filtered);
+    }
   }, [options.options.search]);
+
+  // Caso de añadir contenido
+  useEffect(() => {
+    if (options.options.isAdd) {
+      setActualContent([])
+    } else {
+      setActualContent(contentContext.contents);
+    }
+  }, [options.options.isAdd]);
 
 
 
