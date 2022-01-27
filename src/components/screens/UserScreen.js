@@ -3,14 +3,13 @@ import URL from "../../config/config";
 import useFetch from "../../hooks/useFetch";
 import AuthContext from "../../contexts/authContext";
 import OptionMenu from "../components/OptionMenu";
-import useOptions from "../../hooks/useOptions";
 import ContentList from "../components/ContentList";
 import types from "../../types/types";
 import ContentContext from "../../contexts/contentContext";
 import LoadingBar from "../components/LoadingBar";
 import OptionsContext from "../../contexts/optionsContext";
 
-// Refactor
+// Refactorizar
 const UserScreen = () => {
   const { user } = useContext(AuthContext);
   const options = useContext(OptionsContext);
@@ -19,12 +18,14 @@ const UserScreen = () => {
   const [requestOptions, setRequestOptions] = useState(contentRequestOptions(user.token));
   const [actualContent, setActualContent] = useState([]);
   const [url, setUrl] = useState(URL.BASE_URL + URL.API_USER + "/" + user.username);
-
+  const [searchUrl, setSearchUrl] = useState(URL.BASE_URL + URL.API_SEARCH);
   const [change, setChange] = useState(false);
 
   // Recibir informacion del usuario
-  const { data, isLoading, isSuccess } = useFetch(url, requestOptions);
+  const [data, isLoading, isSuccess, reFetch] = useFetch(url, requestOptions);
+  const [addData, isLoadingAdd, isSuccessAdd, reFetchAdd] = useFetch(searchUrl, searchRequestOptions);
 
+  // Cada vez que se haga una peticion al usuario se actualiza el estado
   useEffect(() => {
     if (isSuccess) {
       contentContext.dispatch({ type: types.update, payload: data.contents });
@@ -36,6 +37,14 @@ const UserScreen = () => {
       });
     }
   }, [isSuccess]);
+
+  // Cada vez que se haga una peticion al api/search se actualiza el estado
+  useEffect(() => {
+    if (isSuccessAdd) {
+      const formated = formatSearchData(addData.contents);
+      setActualContent(formated);
+    }
+  }, [isSuccessAdd]);
 
   // Actualizar el contenido
   useEffect(() => {
@@ -55,25 +64,28 @@ const UserScreen = () => {
 
   // Buscar contenido
   useEffect(() => {
-    if (options.options.searchBy !== "" && !options.options.isAdd) {
+    if (!options.options.isAdd) {
       const regex = new RegExp(options.options.search.toLowerCase());
       const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
       setActualContent(filtered);
-    } else {
-
+    } else if (options.options.isAdd) {
+      if (options.options.search !== "") {
+        console.log("Enviando Api");
+        setSearchUrl(URL.BASE_URL + URL.API_SEARCH + `?title=${options.options.search}&page=1`);
+        reFetch(searchUrl, searchRequestOptions());
+      }
     }
   }, [options.options.search]);
 
   // Caso de añadir contenido
   useEffect(() => {
     if (options.options.isAdd) {
-      setUrl(URL.BASE_URL + URL.API_SEARCH);
-      setRequestOptions(searchRequestOptions);
+      setRequestOptions(searchRequestOptions());
       setActualContent([])
     } else {
-      setUrl(URL.BASE_URL + URL.API_USER	 + "/" + user.username);
+      setUrl(URL.BASE_URL + URL.API_USER + "/" + user.username);
       setRequestOptions(contentRequestOptions(user.token));
-      setActualContent(contentContext.contents);
+      reFetchAdd(url, requestOptions);
     }
   }, [options.options.isAdd]);
 
@@ -89,7 +101,7 @@ const UserScreen = () => {
 
         <div className="column is-four-fifths mt-5 pr-5">
           {
-            isLoading
+            isLoading 
               ? loadingBar
               : <ContentList contents={actualContent} />
           }
@@ -101,16 +113,34 @@ const UserScreen = () => {
   );
 }
 
-const searchRequestOptions = (title, page = 1) => {
-  return {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8"
-    },
-    body: JSON.stringify({
-      "search": title,
-      "page": page
+// Refactorizar todo esto
+
+const formatSearchData = (data) => {
+  if (data === undefined) return [];
+
+  let formated = {
+    contents: data.map((content) => {
+      const { rating } = content;
+      const info = {
+        title: content.title,
+        cover: content.cover,
+        runtime: content.runtime,
+        category: content.category,
+        genres: content.genres
+      };
+
+      return {
+        info,
+        rating
+      }
     })
+  }
+  return formated;
+}
+
+const searchRequestOptions = () => {
+  return {
+    method: "GET"
   }
 }
 
