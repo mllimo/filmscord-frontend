@@ -1,5 +1,4 @@
 import React, {useContext} from "react";
-import ContentContext from "../../content/contentContext";
 import Content from "./Content";
 
 const ContentList = ({contents}) => {

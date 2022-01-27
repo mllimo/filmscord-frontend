@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import AuthContext from "../../auth/authContext";
+import AuthContext from "../../contexts/authContext";
 
 const PrivateRoute = ({children}) => {
   const { user } = useContext(AuthContext);

@@ -2,7 +2,7 @@ import React, { useContext, useEffect} from "react";
 import { Link } from "react-router-dom";
 import DropDownItem from "../components/DropdownItem";
 import DropDownMenu from "../components/DropdownMenu";
-import AuthContext from "../../auth/authContext";
+import AuthContext from "../../contexts/authContext";
 import types from "../../types/types";
 
 const Header = () => {

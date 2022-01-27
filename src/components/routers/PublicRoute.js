@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import AuthContext from "../../auth/authContext";
+import AuthContext from "../../contexts/authContext";
 
 const PublicRoute = ({ children }) => {
   const { user } = useContext(AuthContext);

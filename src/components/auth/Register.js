@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom"
-import AuthContext from "../../auth/authContext";
+import AuthContext from "../../contexts/authContext";
 import useForm from "../../hooks/useForm";
 import { Link } from "react-router-dom";
 import URLS from "../../config/config";

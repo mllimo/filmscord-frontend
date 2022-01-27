@@ -1,30 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import URL from "../../config/config";
 import useFetch from "../../hooks/useFetch";
-import AuthContext from "../../auth/authContext";
+import AuthContext from "../../contexts/authContext";
 import OptionMenu from "../components/OptionMenu";
 import useOptions from "../../hooks/useOptions";
 import ContentList from "../components/ContentList";
 import types from "../../types/types";
-import ContentContext from "../../content/contentContext";
+import ContentContext from "../../contexts/contentContext";
 import LoadingBar from "../components/LoadingBar";
+import OptionsContext from "../../contexts/optionsContext";
 
-const defaultOptions = {
-  isAdd: false,
-  sortBy: types.rating,
-  orderBy: types.asc,
-  search: "",
-};
 
 const UserScreen = () => {
-  const options = useOptions(defaultOptions);
+  const options = useContext(OptionsContext);
   const contentContext = useContext(ContentContext);
   const { user } = useContext(AuthContext);
   const [actualContent, setActualContent] = useState([]);
   const url = URL.BASE_URL + URL.API_USER + "/" + user.username;
 
   // Solucion temporal para que se renderice el componente por actualizacion
-  const [ change, setChange ] = useState(false); 
+  const [change, setChange] = useState(false);
 
   // Recibir informacion del usuario
   const { data, isLoading, isSuccess } = useFetch(url, {
