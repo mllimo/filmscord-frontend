@@ -12,27 +12,22 @@ import OptionsContext from "../../contexts/optionsContext";
 
 // Refactor
 const UserScreen = () => {
+  const { user } = useContext(AuthContext);
   const options = useContext(OptionsContext);
   const contentContext = useContext(ContentContext);
-  const { user } = useContext(AuthContext);
-  const [actualContent, setActualContent] = useState([]);
-  const url = URL.BASE_URL + URL.API_USER + "/" + user.username;
 
-  // Solucion temporal para que se renderice el componente por actualizacion
+  const [requestOptions, setRequestOptions] = useState(contentRequestOptions(user.token));
+  const [actualContent, setActualContent] = useState([]);
+  const [url, setUrl] = useState(URL.BASE_URL + URL.API_USER + "/" + user.username);
+
   const [change, setChange] = useState(false);
 
   // Recibir informacion del usuario
-  const { data, isLoading, isSuccess } = useFetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "authorization": `${user.token}`
-    }
-  });
+  const { data, isLoading, isSuccess } = useFetch(url, requestOptions);
 
   useEffect(() => {
     if (isSuccess) {
-      contentContext.dispatch({ type: types.add, payload: data.contents });
+      contentContext.dispatch({ type: types.update, payload: data.contents });
       contentContext.dispatch({
         type: types.sort, payload: {
           by: options.options.sortBy,
@@ -60,21 +55,24 @@ const UserScreen = () => {
 
   // Buscar contenido
   useEffect(() => {
-    const regex = new RegExp(options.options.search.toLowerCase());
-    if (!options.options.isAdd) {
-      // Buscar por titulo en nuestro backend para mantener segura las api key
-      // Meter los contenidos que coincidan con la busqueda en ActualContent
-    } else {
+    if (options.options.searchBy !== "" && !options.options.isAdd) {
+      const regex = new RegExp(options.options.search.toLowerCase());
       const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
       setActualContent(filtered);
+    } else {
+
     }
   }, [options.options.search]);
 
   // Caso de añadir contenido
   useEffect(() => {
     if (options.options.isAdd) {
+      setUrl(URL.BASE_URL + URL.API_SEARCH);
+      setRequestOptions(searchRequestOptions);
       setActualContent([])
     } else {
+      setUrl(URL.BASE_URL + URL.API_USER	 + "/" + user.username);
+      setRequestOptions(contentRequestOptions(user.token));
       setActualContent(contentContext.contents);
     }
   }, [options.options.isAdd]);
@@ -103,6 +101,28 @@ const UserScreen = () => {
   );
 }
 
+const searchRequestOptions = (title, page = 1) => {
+  return {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify({
+      "search": title,
+      "page": page
+    })
+  }
+}
+
+const contentRequestOptions = (token) => {
+  return {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "authorization": `${token}`
+    }
+  };
+}
 const loadingBar = (
   <div className="container">
     <LoadingBar />
