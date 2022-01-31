@@ -11,7 +11,6 @@ const contentReducer = (state = [], action) => {
     case types.update:
       return action.payload;
 
-    // TODO: refac
     case types.sort:
       if (action.payload.by === types.rating) {
         if (action.payload.in === types.asc) {

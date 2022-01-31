@@ -22,95 +22,99 @@ const UserScreen = () => {
   const [change, setChange] = useState(false);
 
   // Recibir informacion del usuario
-  const [data, isLoading, isSuccess, reFetch] = useFetch(url, requestOptions);
-  const [addData, isLoadingAdd, isSuccessAdd, reFetchAdd] = useFetch(searchUrl, searchRequestOptions);
+  const { data, errors, isLoading, reFetch } = useFetch(url, requestOptions);
+  const { data: dataAdd, errors: errosAdd, isLoading: isLoadingAdd, reFetch: reFetchAdd } = useFetch(searchUrl, searchRequestOptions);
 
   // Cada vez que se haga una peticion al usuario se actualiza el estado
   useEffect(() => {
-    if (isSuccess) {
-      contentContext.dispatch({ type: types.update, payload: data.contents });
-      contentContext.dispatch({
-        type: types.sort, payload: {
-          by: options.options.sortBy,
-          in: options.options.orderBy
-        }
-      });
+    if (data) {
+      if (!errors) {
+        contentContext.dispatch({ type: types.update, payload: data.contents });
+        contentContext.dispatch({
+          type: types.sort, payload: {
+            by: options.options.sortBy,
+            in: options.options.orderBy
+          }
+        });
+      }
     }
-  }, [isSuccess]);
+  }, [isLoading]);
 
-  // Cada vez que se haga una peticion al api/search se actualiza el estado
-  useEffect(() => {
-    if (isSuccessAdd) {
-      const formated = formatSearchData(addData.contents);
+// Cada vez que se haga una peticion al api/search se actualiza el estado
+useEffect(() => {
+  if (dataAdd !== null) {
+    if (errors === undefined) {
+      const formated = formatSearchData(dataAdd.contents);
       setActualContent(formated);
     }
-  }, [isSuccessAdd]);
+  }
+}, [isLoadingAdd]);
 
-  // Actualizar el contenido
-  useEffect(() => {
-    setActualContent(contentContext.contents);
-  }, [contentContext.contents]);
+// Actualizar el contenido
+useEffect(() => {
+  setActualContent(contentContext.contents);
+}, [contentContext.contents]);
 
-  // Ordenar el contenido
-  useEffect(() => {
-    contentContext.dispatch({
-      type: types.sort, payload: {
-        by: options.options.sortBy,
-        in: options.options.orderBy
-      }
-    });
-    setChange(!change);
-  }, [options.options.sortBy, options.options.orderBy]);
-
-  // Buscar contenido
-  useEffect(() => {
-    if (!options.options.isAdd) {
-      const regex = new RegExp(options.options.search.toLowerCase());
-      const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
-      setActualContent(filtered);
-    } else if (options.options.isAdd) {
-      if (options.options.search !== "") {
-        console.log("Enviando Api");
-        setSearchUrl(URL.BASE_URL + URL.API_SEARCH + `?title=${options.options.search}&page=1`);
-        reFetch(searchUrl, searchRequestOptions());
-      }
+// Ordenar el contenido
+useEffect(() => {
+  contentContext.dispatch({
+    type: types.sort, payload: {
+      by: options.options.sortBy,
+      in: options.options.orderBy
     }
-  }, [options.options.search]);
+  });
+  setChange(!change);
+}, [options.options.sortBy, options.options.orderBy]);
 
-  // Caso de añadir contenido
-  useEffect(() => {
-    if (options.options.isAdd) {
-      setRequestOptions(searchRequestOptions());
-      setActualContent([])
-    } else {
-      setUrl(URL.BASE_URL + URL.API_USER + "/" + user.username);
-      setRequestOptions(contentRequestOptions(user.token));
-      reFetchAdd(url, requestOptions);
+// Buscar contenido || memo?
+useEffect(() => {
+  if (!options.options.isAdd) {
+    const regex = new RegExp(options.options.search.toLowerCase());
+    const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
+    setActualContent(filtered);
+  } else if (options.options.isAdd) {
+    if (options.options.search !== "") {
+      console.log("Enviando Api");
+      setSearchUrl(URL.BASE_URL + URL.API_SEARCH + `?title=${options.options.search}&page=1`);
+      reFetch(searchUrl, searchRequestOptions());
     }
-  }, [options.options.isAdd]);
+  }
+}, [options.options.search]);
+
+// Caso de añadir contenido
+useEffect(() => {
+  if (options.options.isAdd) {
+    setRequestOptions(searchRequestOptions());
+    setActualContent([])
+  } else {
+    setUrl(URL.BASE_URL + URL.API_USER + "/" + user.username);
+    setRequestOptions(contentRequestOptions(user.token));
+    reFetchAdd(url, requestOptions);
+  }
+}, [options.options.isAdd]);
 
 
 
-  return (
-    <div className="mt-5">
-      <div className="columns">
+return (
+  <div className="mt-5">
+    <div className="columns">
 
-        <div className="column is-one-fifth mt-5 ml-5">
-          <OptionMenu options={options} />
-        </div>
-
-        <div className="column is-four-fifths mt-5 pr-5">
-          {
-            isLoading 
-              ? loadingBar
-              : <ContentList contents={actualContent} />
-          }
-        </div>
-
-        <div name={`${change}`}></div>
+      <div className="column is-one-fifth mt-5 ml-5">
+        <OptionMenu options={options} />
       </div>
+
+      <div className="column is-four-fifths mt-5 pr-5">
+        {
+          isLoading
+            ? loadingBar
+            : <ContentList contents={actualContent} />
+        }
+      </div>
+
+      <div name={`${change}`}></div>
     </div>
-  );
+  </div>
+);
 }
 
 // Refactorizar todo esto
@@ -118,23 +122,22 @@ const UserScreen = () => {
 const formatSearchData = (data) => {
   if (data === undefined) return [];
 
-  let formated = {
-    contents: data.map((content) => {
-      const { rating } = content;
-      const info = {
-        title: content.title,
-        cover: content.cover,
-        runtime: content.runtime,
-        category: content.category,
-        genres: content.genres
-      };
+  let formated = data.map((content) => {
+    const { rating } = content;
+    const info = {
+      title: content.title,
+      cover: content.cover,
+      runtime: content.runtime,
+      category: content.category,
+      genres: content.genres
+    };
 
-      return {
-        info,
-        rating
-      }
-    })
-  }
+    return {
+      info,
+      rating
+    }
+  });
+
   return formated;
 }
 
