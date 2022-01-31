@@ -45,7 +45,8 @@ useEffect(() => {
   if (dataAdd !== null) {
     if (errors === undefined) {
       const formated = formatSearchData(dataAdd.contents);
-      setActualContent(formated);
+      console.log("formated", formated);
+      contentContext.dispatch({ type: types.update, payload: formated });
     }
   }
 }, [isLoadingAdd]);
@@ -76,7 +77,7 @@ useEffect(() => {
     if (options.options.search !== "") {
       console.log("Enviando Api");
       setSearchUrl(URL.BASE_URL + URL.API_SEARCH + `?title=${options.options.search}&page=1`);
-      reFetch(searchUrl, searchRequestOptions());
+      reFetchAdd(searchUrl, searchRequestOptions());
     }
   }
 }, [options.options.search]);
@@ -89,7 +90,7 @@ useEffect(() => {
   } else {
     setUrl(URL.BASE_URL + URL.API_USER + "/" + user.username);
     setRequestOptions(contentRequestOptions(user.token));
-    reFetchAdd(url, requestOptions);
+    reFetch(url, requestOptions);
   }
 }, [options.options.isAdd]);
 
@@ -105,7 +106,7 @@ return (
 
       <div className="column is-four-fifths mt-5 pr-5">
         {
-          isLoading
+          isLoading 
             ? loadingBar
             : <ContentList contents={actualContent} />
         }
@@ -134,7 +135,7 @@ const formatSearchData = (data) => {
 
     return {
       info,
-      rating
+      rating: (Array.isArray(rating)) ? rating[0] : rating
     }
   });
 

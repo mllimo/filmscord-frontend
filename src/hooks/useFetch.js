@@ -41,10 +41,16 @@ const useFetch = (initUrl, initOptions) => {
           console.log("res", res);
         }
       })
-
+      .catch(err => {
+        if (isMounted.current) {
+          setErrors(err);
+          setisLoading(false);
+        }
+        console.log("err", err);
+      });
   }, [url, options]);
 
-  return {data, errors, isLoading, reFetch};
+  return { data, errors, isLoading, reFetch };
 }
 
 export default useFetch;
