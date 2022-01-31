@@ -15,9 +15,9 @@ const contentReducer = (state = [], action) => {
       console.log("STAT", state);
       if (action.payload.by === types.rating) {
         if (action.payload.in === types.asc) {
-          return state.sort((a, b) => a.info.rating - b.info.rating);
+          return state.sort((a, b) => a.rate - b.rate);
         } else {
-          return state.sort((a, b) => b.info.rating - a.info.rating);
+          return state.sort((a, b) => b.rate - a.rate);
         }
       } else if (action.payload.by === types.runtime) {
         if (action.payload.in === types.asc) {
