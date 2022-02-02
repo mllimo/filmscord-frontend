@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import URL from "../../config/config";
 import useFetch from "../../hooks/useFetch";
 import AuthContext from "../../contexts/authContext";
@@ -11,17 +11,19 @@ import OptionsContext from "../../contexts/optionsContext";
 
 // Refactorizar
 const UserScreen = () => {
+  // Contexts
   const { user } = useContext(AuthContext);
   const options = useContext(OptionsContext);
   const contentContext = useContext(ContentContext);
 
+  // States
   const [requestOptions, setRequestOptions] = useState(contentRequestOptions(user.token));
   const [actualContent, setActualContent] = useState([]);
   const [url, setUrl] = useState(URL.BASE_URL + URL.API_USER + "/" + user.username);
   const [searchUrl, setSearchUrl] = useState(URL.BASE_URL + URL.API_SEARCH);
   const [change, setChange] = useState(false);
 
-  // Recibir informacion del usuario
+  // Fetchs
   const { data, errors, isLoading, reFetch } = useFetch(url, requestOptions);
   const { data: dataAdd, errors: errorsAdd, isLoading: isLoadingAdd, reFetch: reFetchAdd } = useFetch(searchUrl, searchRequestOptions());
 

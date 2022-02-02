@@ -12,7 +12,6 @@ const contentReducer = (state = [], action) => {
       return action.payload;
 
     case types.sort:
-      console.log("STAT", state);
       if (action.payload.by === types.rating) {
         if (action.payload.in === types.asc) {
           return state.sort((a, b) => a.rate - b.rate);

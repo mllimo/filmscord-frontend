@@ -1,10 +1,12 @@
 import React, {useContext} from "react";
 import Content from "./Content";
+import Modal from "./Modal";
 
 const ContentList = ({contents}) => {
 
   return (
     <div className="card-grid is-flex is-align-items-center is-justify-content-space-evenly mr-6">
+        <Modal></Modal>
         {
           contents != undefined
             ? contents.map((content, index) => (
