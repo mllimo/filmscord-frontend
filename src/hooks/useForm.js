@@ -6,6 +6,7 @@ const useForm = (fields, toSend, fetchOptions) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [response, setResponse] = useState({});
   let request = fetchOptions;
+  
   const handleInputChange = ({ target }) => {
     setForm({ ...form, [target.name]: target.value });
   };

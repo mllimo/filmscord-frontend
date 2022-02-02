@@ -11,7 +11,6 @@ const useFetch = (initUrl, initOptions) => {
   const [isLoading, setisLoading] = useState(true);
 
   const reFetch = (newUrl, newOptions) => {
-    console.log("ReFetch", newUrl, newOptions);
     setisLoading(true);
     setData(null);
     setErrors(null);
@@ -27,8 +26,7 @@ const useFetch = (initUrl, initOptions) => {
   }, []);
 
   useEffect(() => {
-    console.log("Fetching", url, options, isMounted.current);
-    axios.get(url, options)
+    axios.request(url, options)
       .then(res => {
         if (isMounted.current) {
           if (res.status === 200) {
@@ -38,7 +36,6 @@ const useFetch = (initUrl, initOptions) => {
             setErrors(res.data);
             setisLoading(false);
           }
-          console.log("res", res);
         }
       })
       .catch(err => {
@@ -46,7 +43,6 @@ const useFetch = (initUrl, initOptions) => {
           setErrors(err);
           setisLoading(false);
         }
-        console.log("err", err);
       });
   }, [url, options]);
 

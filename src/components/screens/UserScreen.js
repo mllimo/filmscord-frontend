@@ -29,7 +29,6 @@ const UserScreen = () => {
 
   // Cada vez que se haga una peticion al usuario se actualiza el estado
   useEffect(() => {
-    console.log('data', data)
     if (data) {
       if (!errors) {
         contentContext.dispatch({ type: types.update, payload: data.contents });
