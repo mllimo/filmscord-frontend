@@ -14,9 +14,13 @@ const initAuth = () => {
 
 const DEFAULT_OPTIONS = {
   isAdd: false,
+  isAddContent: false,
+  isUpdate: false,
   sortBy: types.rating,
   orderBy: types.asc,
   search: "",
+  updateContent: {},
+  addContent: {}
 };
 
 const Filmscord = () => {

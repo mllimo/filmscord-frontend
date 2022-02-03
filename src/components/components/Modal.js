@@ -3,19 +3,19 @@ import { useEffect } from "react/cjs/react.development";
 import useForm from "../../hooks/useForm";
 
 
-const Modal = ({ content, url, options }) => {
+const Modal = ({ isActive, content, url, options }) => {
   const testScore = 3;
   const modelRef = useRef();
-  const { form, handleInputChange, handleSubmit } = useForm(initFields(content.id), url, options);
+  const { form, handleInputChange, handleSubmit } = useForm(initFields(content?.id || 0), url, options);
   const [scoreUi, setscoreUi] = useState(makeScoreUi(testScore));
   const [fillScore, setfillScore] = useState(testScore);
-
+  const {isActive: isOpen, setIsActive: setIsOpen} = isActive;
   useEffect(() => {
     console.log(form);
   }, [form]);
 
   const mouseOverOutStarHandler = (e) => {
-    if (fillScore != testScore) {
+    if (fillScore !== testScore) {
       setscoreUi(makeScoreUi(testScore));
     }
   };
@@ -31,7 +31,7 @@ const Modal = ({ content, url, options }) => {
   };
 
   return (
-    <div className="modal is-active" ref={modelRef}>
+    <div className={"modal " + (isOpen ? "is-active" : "")} ref={modelRef}>
       <div className="modal-background"></div>
       <div className="modal-card">
         <header className="modal-card-head">
@@ -90,7 +90,7 @@ const Modal = ({ content, url, options }) => {
 
 function makeScoreUi(score) {
   let stars = [];
-  if (score == 0) score = 1;
+  if (score === 0) score = 1;
 
   for (let i = 1; i <= score; i++) {
     stars.push(fillStar);
