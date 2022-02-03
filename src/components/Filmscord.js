@@ -5,7 +5,7 @@ import AuthContext from "../contexts/authContext";
 import OptionsContext from "../contexts/optionsContext";
 import contentReducer from "../reducers/contentReducer";
 import ContentContext from "../contexts/contentContext";
-import useOptions from "../hooks/useOptions";
+import optionReducer from "../reducers/optionReducer";
 import types from "../types/types";
 
 const initAuth = () => {
@@ -15,7 +15,7 @@ const initAuth = () => {
 const DEFAULT_OPTIONS = {
   isAdd: false,
   isAddContent: false,
-  isUpdate: false,
+  isUpdateContent: false,
   sortBy: types.rating,
   orderBy: types.asc,
   search: "",
@@ -26,7 +26,7 @@ const DEFAULT_OPTIONS = {
 const Filmscord = () => {
   const userReducer = useReducer(authReducer, {}, initAuth);
   const contentsReducer = useReducer(contentReducer, []);
-  const { options, changeOptions } = useOptions(DEFAULT_OPTIONS);
+  const optionsReducer = useReducer(optionReducer, DEFAULT_OPTIONS);
 
   useEffect(() => {
     if (!userReducer[0]) return;
@@ -45,8 +45,8 @@ const Filmscord = () => {
         }}>
 
           <OptionsContext.Provider value={{
-            options,
-            changeOptions
+            options: optionsReducer[0],
+            dispatch: optionsReducer[1]
           }}>
 
             <FilmscordRouter />

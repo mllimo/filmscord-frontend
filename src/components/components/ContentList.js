@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import AuthContext from "../../contexts/authContext";
 import OptionsContext from "../../contexts/optionsContext";
 import URL from "../../config/config";
@@ -9,8 +9,7 @@ import { useEffect } from "react/cjs/react.development";
 const ContentList = ({ contents }) => {
   const { user } = useContext(AuthContext);
   const options = useContext(OptionsContext);
-  const [isActive, setIsActive] = useState(false);
-  const modalRef = useRef();
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   const reqOptions = {
     method: "PUT",
@@ -21,18 +20,13 @@ const ContentList = ({ contents }) => {
   };
 
   useEffect(() => {
-    if (options.options.isAddContent || options.options.isUpdate) {
-      setIsActive(true);
-    }
-  }, [options.options.isAddContent, options.options.isUpdate]);
+    setForceUpdate(!forceUpdate);
+  }, [options.options.isAddContent, options.options.isUpdateContent]);
 
   return (
     <div className="card-grid is-flex is-align-items-center is-justify-content-space-evenly mr-6">
       <Modal
-        isActive={{ isActive, setIsActive }}
-        ref={modalRef}
-        content={(options.isUpdate ? options.updateContent : options.addContent)}
-        url={(options.isUpdate ? updateUrl : addUrl)}
+        url={(options.isUpdateContent ? updateUrl : addUrl)}
         options={reqOptions}
       />
       {

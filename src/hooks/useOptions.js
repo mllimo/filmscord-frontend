@@ -8,6 +8,7 @@ const useOptions = (initialState = {}) => {
       setOptions({ ...options, isAdd: !options.isAdd });
     } else {
       setOptions({...options, [option.target.name]: option.target.value});
+      console.log('use', {...options, [option.target.name]: option.target.value});
     }
   };
 

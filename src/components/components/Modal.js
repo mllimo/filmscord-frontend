@@ -1,22 +1,31 @@
-import React, { useRef, useState } from "react";
-import { useEffect } from "react/cjs/react.development";
+import React, { useRef, useState, useEffect, useContext } from "react";
+import OptionsContext from "../../contexts/optionsContext";
 import useForm from "../../hooks/useForm";
 
 
-const Modal = ({ isActive, content, url, options }) => {
-  const testScore = 3;
+const Modal = ({ url, options: optionsReq }) => {
+  const defaultRate = 3;
   const modelRef = useRef();
-  const { form, handleInputChange, handleSubmit } = useForm(initFields(content?.id || 0), url, options);
-  const [scoreUi, setscoreUi] = useState(makeScoreUi(testScore));
-  const [fillScore, setfillScore] = useState(testScore);
-  const {isActive: isOpen, setIsActive: setIsOpen} = isActive;
+
+  const options = useContext(OptionsContext);
+  const [title, setTitle] = useState("");
+  const [rate, setRate] = useState(defaultRate);
+  const [comment, setComment] = useState("");
+  const [date, setDate] = useState("1999-12-14");
+  const [id, setId] = useState(0);
+
+
+  const { form, handleInputChange, handleSubmit } = useForm(initFields(id), url, optionsReq);
+  const [scoreUi, setscoreUi] = useState(makeScoreUi(rate));
+  const [fillScore, setfillScore] = useState(rate);
+
   useEffect(() => {
     console.log(form);
   }, [form]);
 
   const mouseOverOutStarHandler = (e) => {
-    if (fillScore !== testScore) {
-      setscoreUi(makeScoreUi(testScore));
+    if (fillScore !== rate) {
+      setscoreUi(makeScoreUi(rate));
     }
   };
 
@@ -28,14 +37,29 @@ const Modal = ({ isActive, content, url, options }) => {
   const closeHandler = (e) => {
     e.preventDefault();
     modelRef.current.classList.remove("is-active");
+    options.dispatch({ name: "isAddContent", payload: false });
+    options.dispatch({ name: "isUpdateContent", payload: false });
+    options.dispatch({ name: "addContent", payload: null });
+    options.dispatch({ name: "updateContent", payload: null });
   };
 
+  useEffect(() => {
+    if (options.options.isAddContent || options.options.isUpdateContent) {
+      modelRef.current.classList.add("is-active");
+      setTitle(options.options.addContent.title?.text || options.options.updateContent.title?.text);
+      setRate(options.options.addContent?.score || options.options.updateContent?.score);
+      setComment(options.options.addContent?.comment || options.options.updateContent?.comment);
+      setDate(options.options.addContent?.date_watched || options.options.updateContent?.date_watched);
+      setId(options.options.addContent?.id || options.options.updateContent?.id);
+    }
+  }, [options.options.isAddContent, options.options.isUpdateContent]);
+
   return (
-    <div className={"modal " + (isOpen ? "is-active" : "")} ref={modelRef}>
+    <div className="modal" ref={modelRef}>
       <div className="modal-background"></div>
       <div className="modal-card">
         <header className="modal-card-head">
-          <p className="modal-card-title">Modal title</p>
+          <p className="modal-card-title">{title}</p>
           <button className="delete" aria-label="close" onClick={closeHandler}></button>
         </header>
         <section className="modal-card-body">
@@ -61,7 +85,8 @@ const Modal = ({ isActive, content, url, options }) => {
 
             <div className="field is-inline-flex">
               <label className="label">Date watched:</label>
-              <input className="ml-5" type="date" name="fields.date_watched"
+              <input className="ml-5" type="date" name="date_watched"
+                value={date}
                 onChange={handleInputChange}
               ></input>
             </div>
@@ -70,7 +95,7 @@ const Modal = ({ isActive, content, url, options }) => {
 
             <div className="field">
               <label className="label">Comment:</label>
-              <textarea className="textarea" name="comment" placeholder="e.g. Hello world"
+              <textarea className="textarea" name="comment" placeholder="e.g. Hello world" value={comment}
                 onChange={handleInputChange}
               ></textarea>
             </div>
