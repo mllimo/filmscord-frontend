@@ -45,8 +45,9 @@ const Modal = ({ url, options: optionsReq }) => {
 
   useEffect(() => {
     if (options.options.isAddContent || options.options.isUpdateContent) {
+      console.log(options.options);
       modelRef.current.classList.add("is-active");
-      setTitle(options.options.addContent?.title?.text || options.options.updateContent?.title?.text || "");
+      setTitle(options.options.addContent?.info?.title.text || options.options.updateContent.info.title?.text || "");
       setRate(options.options.addContent?.score || options.options.updateContent?.score || defaultRate);
       setComment(options.options.addContent?.comment || options.options.updateContent?.comment || "");
       setDate(options.options.addContent?.date_watched || options.options.updateContent?.date_watched || "1999-12-14");
@@ -95,7 +96,8 @@ const Modal = ({ url, options: optionsReq }) => {
 
             <div className="field">
               <label className="label">Comment:</label>
-              <textarea className="textarea" name="comment" placeholder="e.g. Hello world" value={comment}
+              <textarea className="textarea" name="comment" placeholder="e.g. Hello world" 
+                value={comment}
                 onChange={handleInputChange}
               ></textarea>
             </div>

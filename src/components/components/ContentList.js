@@ -32,7 +32,7 @@ const ContentList = ({ contents }) => {
       {
         contents != undefined
           ? contents.map((content, index) => (
-            <Content key={index} info={content.info} />
+            <Content key={index} content={{...content}} />
           ))
           : emptyList
       }
