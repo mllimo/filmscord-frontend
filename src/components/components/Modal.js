@@ -46,11 +46,11 @@ const Modal = ({ url, options: optionsReq }) => {
   useEffect(() => {
     if (options.options.isAddContent || options.options.isUpdateContent) {
       modelRef.current.classList.add("is-active");
-      setTitle(options.options.addContent.title?.text || options.options.updateContent.title?.text);
-      setRate(options.options.addContent?.score || options.options.updateContent?.score);
-      setComment(options.options.addContent?.comment || options.options.updateContent?.comment);
-      setDate(options.options.addContent?.date_watched || options.options.updateContent?.date_watched);
-      setId(options.options.addContent?.id || options.options.updateContent?.id);
+      setTitle(options.options.addContent?.title?.text || options.options.updateContent?.title?.text || "");
+      setRate(options.options.addContent?.score || options.options.updateContent?.score || defaultRate);
+      setComment(options.options.addContent?.comment || options.options.updateContent?.comment || "");
+      setDate(options.options.addContent?.date_watched || options.options.updateContent?.date_watched || "1999-12-14");
+      setId(options.options.addContent?.id || options.options.updateContent?.id || 0);
     }
   }, [options.options.isAddContent, options.options.isUpdateContent]);
 
