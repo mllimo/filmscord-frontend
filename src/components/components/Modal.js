@@ -1,10 +1,11 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
+import * as DateParser from "../../helpers/date-parser";
 import OptionsContext from "../../contexts/optionsContext";
 import useForm from "../../hooks/useForm";
 
 
 const Modal = ({ url, options: optionsReq }) => {
-  const defaultRate = 3;
+  const defaultRate = 0;
   const modelRef = useRef();
 
   const options = useContext(OptionsContext);
@@ -45,15 +46,19 @@ const Modal = ({ url, options: optionsReq }) => {
 
   useEffect(() => {
     if (options.options.isAddContent || options.options.isUpdateContent) {
-      console.log(options.options);
       modelRef.current.classList.add("is-active");
-      setTitle(options.options.addContent?.info?.title.text || options.options.updateContent.info.title?.text || "");
-      setRate(options.options.addContent?.score || options.options.updateContent?.score || defaultRate);
+      console.log(DateParser.YYYYMMDD(options.options.updateContent?.date_watched));
+      setTitle(options.options.addContent?.info?.title.text || options.options.updateContent?.info?.title.text || "");
+      setRate((options.options.addContent?.rate || options.options.updateContent.rate) || defaultRate);
       setComment(options.options.addContent?.comment || options.options.updateContent?.comment || "");
       setDate(options.options.addContent?.date_watched || options.options.updateContent?.date_watched || "1999-12-14");
       setId(options.options.addContent?.id || options.options.updateContent?.id || 0);
     }
   }, [options.options.isAddContent, options.options.isUpdateContent]);
+
+  useEffect(() => {
+    setscoreUi(makeScoreUi(rate));
+  }, [rate]);
 
   return (
     <div className="modal" ref={modelRef}>
@@ -87,7 +92,7 @@ const Modal = ({ url, options: optionsReq }) => {
             <div className="field is-inline-flex">
               <label className="label">Date watched:</label>
               <input className="ml-5" type="date" name="date_watched"
-                value={date}
+                value={DateParser.YYYYMMDD(date)}
                 onChange={handleInputChange}
               ></input>
             </div>
@@ -117,7 +122,7 @@ const Modal = ({ url, options: optionsReq }) => {
 
 function makeScoreUi(score) {
   let stars = [];
-  if (score === 0) score = 1;
+  console.log('rate', score);
 
   for (let i = 1; i <= score; i++) {
     stars.push(fillStar);
@@ -138,7 +143,6 @@ function initFields(id) {
     score: 1
   };
 }
-
 
 const emptyStar = (
   <i className="far fa-star"></i>
