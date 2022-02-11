@@ -1,14 +1,18 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import * as DateParser from "../../helpers/date-parser";
 import OptionsContext from "../../contexts/optionsContext";
+import AuthContext from "../../contexts/authContext";
 import useForm from "../../hooks/useForm";
+import URL from "../../config/config";
+import { isCompositeComponent } from "react-dom/cjs/react-dom-test-utils.production.min";
 
 
-const Modal = ({ url, options: optionsReq }) => {
+const Modal = () => {
   const defaultRate = 0;
   const modelRef = useRef();
 
-  const options = useContext(OptionsContext);
+  const { user } = useContext(AuthContext);
+  const { options, dispatch } = useContext(OptionsContext);
   const [title, setTitle] = useState("");
   const [rate, setRate] = useState(defaultRate);
   const [comment, setComment] = useState("");
@@ -16,7 +20,7 @@ const Modal = ({ url, options: optionsReq }) => {
   const [id, setId] = useState(0);
 
 
-  const { form, handleInputChange, handleSubmit } = useForm(initFields(id), url, optionsReq);
+  const { form, handleInputChange, handleSubmit, changeUrl, changeOptions } = useForm(initFields(id), "/", {});
   const [scoreUi, setscoreUi] = useState(makeScoreUi(rate));
   const [fillScore, setfillScore] = useState(rate);
 
@@ -24,13 +28,21 @@ const Modal = ({ url, options: optionsReq }) => {
     console.log(form);
   }, [form]);
 
+  const mouseOnClickStartHandler = (index) => {
+    let newScore = index + 1;
+    if (rate == newScore) newScore = 0;
+    setfillScore(newScore);
+    setRate(newScore);
+    setscoreUi(makeScoreUi(newScore));
+  };
+
   const mouseOverOutStarHandler = (e) => {
     if (fillScore !== rate) {
       setscoreUi(makeScoreUi(rate));
     }
   };
 
-  const mouseOverStarHandler = (e, index) => {
+  const mouseOverStarHandler = (index) => {
     setscoreUi(makeScoreUi(index + 1));
     setfillScore(index + 1);
   };
@@ -38,27 +50,59 @@ const Modal = ({ url, options: optionsReq }) => {
   const closeHandler = (e) => {
     e.preventDefault();
     modelRef.current.classList.remove("is-active");
-    options.dispatch({ name: "isAddContent", payload: false });
-    options.dispatch({ name: "isUpdateContent", payload: false });
-    options.dispatch({ name: "addContent", payload: null });
-    options.dispatch({ name: "updateContent", payload: null });
+    dispatch({ name: "isAddContent", payload: false });
+    dispatch({ name: "isUpdateContent", payload: false });
+    dispatch({ name: "addContent", payload: null });
+    dispatch({ name: "updateContent", payload: null });
   };
 
   useEffect(() => {
-    if (options.options.isAddContent || options.options.isUpdateContent) {
+    if (options.isAddContent || options.isUpdateContent) {
       modelRef.current.classList.add("is-active");
-      console.log(DateParser.YYYYMMDD(options.options.updateContent?.date_watched));
-      setTitle(options.options.addContent?.info?.title.text || options.options.updateContent?.info?.title.text || "");
-      setRate((options.options.addContent?.rate || options.options.updateContent.rate) || defaultRate);
-      setComment(options.options.addContent?.comment || options.options.updateContent?.comment || "");
-      setDate(options.options.addContent?.date_watched || options.options.updateContent?.date_watched || "1999-12-14");
-      setId(options.options.addContent?.id || options.options.updateContent?.id || 0);
+      setTitle(options.addContent?.info?.title.text || options.updateContent?.info?.title.text || "");
+      setRate((options.addContent?.rate || options.updateContent?.rate) || defaultRate);
+      setComment(options.addContent?.comment || options.updateContent?.comment || "");
+      setDate(options.addContent?.date_watched || options.updateContent?.date_watched || DateParser.YYYYMMDD(new Date()));
+      setId(options.addContent?.info?.title.id || options.updateContent?.info?.title.id || 0);
     }
-  }, [options.options.isAddContent, options.options.isUpdateContent]);
+
+    if (options.isAdd) {
+      changeUrl(URL.BASE_URL + URL.API_USER + "/" + user.username + URL.CONTENT);
+      changeOptions({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `${user.token}`
+        }
+      });
+    } else {
+      changeUrl(URL.BASE_URL + URL.API_USER + "/" + user.username + URL.CONTENT);
+      changeOptions({
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `${user.token}`
+        }
+      });
+    }
+  }, [options.isAddContent, options.isUpdateContent]);
 
   useEffect(() => {
-    setscoreUi(makeScoreUi(rate));
+    makeScoreUi(rate);
+    handleInputChange({ target: { name: "rate", value: rate } });
   }, [rate]);
+
+  useEffect(() => {
+    handleInputChange({ target: { name: "date_watched", value: date } });
+  }, [date]);
+
+  useEffect(() => {
+    handleInputChange({ target: { name: "comment", value: comment } });
+  }, [comment]);
+
+  useEffect(() => {
+    handleInputChange({ target: { name: "id", value: id } });
+  }, [id]);
 
   return (
     <div className="modal" ref={modelRef}>
@@ -78,7 +122,8 @@ const Modal = ({ url, options: optionsReq }) => {
                   scoreUi.map((star, index) => {
                     return (
                       <div className="is-inline-flex mouse-hover" key={index}
-                        onMouseOver={(e) => mouseOverStarHandler(e, index)}
+                        onClick={(e) => mouseOnClickStartHandler(index)}
+                        onMouseOver={(e) => mouseOverStarHandler(index)}
                         onMouseOut={mouseOverOutStarHandler}
                       >{star}</div>
                     );
@@ -93,7 +138,9 @@ const Modal = ({ url, options: optionsReq }) => {
               <label className="label">Date watched:</label>
               <input className="ml-5" type="date" name="date_watched"
                 value={DateParser.YYYYMMDD(date)}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  setDate(e.target.value);
+                }}
               ></input>
             </div>
 
@@ -101,9 +148,11 @@ const Modal = ({ url, options: optionsReq }) => {
 
             <div className="field">
               <label className="label">Comment:</label>
-              <textarea className="textarea" name="comment" placeholder="e.g. Hello world" 
+              <textarea className="textarea" name="comment" placeholder="e.g. Hello world"
                 value={comment}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  setComment(e.target.value);
+                }}
               ></textarea>
             </div>
 
@@ -122,7 +171,6 @@ const Modal = ({ url, options: optionsReq }) => {
 
 function makeScoreUi(score) {
   let stars = [];
-  console.log('rate', score);
 
   for (let i = 1; i <= score; i++) {
     stars.push(fillStar);
@@ -140,7 +188,7 @@ function initFields(id) {
     id,
     date_watched: "",
     comment: "",
-    score: 1
+    rate: 1
   };
 }
 

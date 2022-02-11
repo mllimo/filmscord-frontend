@@ -1,10 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import AuthContext from "../../contexts/authContext";
 import OptionsContext from "../../contexts/optionsContext";
 import URL from "../../config/config";
 import Content from "./Content";
 import Modal from "./Modal";
-import { useEffect } from "react/cjs/react.development";
 
 const ContentList = ({ contents }) => {
   const { user } = useContext(AuthContext);
@@ -25,12 +24,9 @@ const ContentList = ({ contents }) => {
 
   return (
     <div className="card-grid is-flex is-align-items-center is-justify-content-space-evenly mr-6">
-      <Modal
-        url={(options.isUpdateContent ? updateUrl : addUrl)}
-        options={reqOptions}
-      />
+      <Modal/>
       {
-        contents != undefined
+        contents !== undefined
           ? contents.map((content, index) => (
             <Content key={index} content={{...content}} />
           ))
