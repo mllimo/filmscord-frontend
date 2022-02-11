@@ -14,7 +14,7 @@ const UserScreen = () => {
   // Contexts
   const { user } = useContext(AuthContext);
   const { options } = useContext(OptionsContext);
-  const { contents, dispatch: contentDispatch} = useContext(ContentContext);
+  const { contents, dispatch: contentDispatch } = useContext(ContentContext);
 
   // States
   const [requestOptions, setRequestOptions] = useState(contentRequestOptions(user.token));
@@ -93,8 +93,8 @@ const UserScreen = () => {
   useEffect(() => {
     console.log(options);
     if (options.isAdd) {
-      setRequestOptions(searchRequestOptions());
       setActualContent([])
+      setRequestOptions(searchRequestOptions());
     } else {
       setUrl(URL.BASE_URL + URL.API_USER + "/" + user.username);
       setRequestOptions(contentRequestOptions(user.token));

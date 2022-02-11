@@ -13,7 +13,7 @@ const Modal = () => {
   const modelRef = useRef();
 
   const { user } = useContext(AuthContext);
-  const { dispatch: dispatchContent} = useContext(ContentContext);
+  const { dispatch: dispatchContent } = useContext(ContentContext);
   const { options, dispatch } = useContext(OptionsContext);
   const [title, setTitle] = useState("");
   const [rate, setRate] = useState(defaultRate);
@@ -22,7 +22,7 @@ const Modal = () => {
   const [id, setId] = useState(0);
 
 
-  const { data, errors, reFetch } = useFetch("/", {});
+  const { reFetch } = useFetch("/", {});
   const [scoreUi, setscoreUi] = useState(makeScoreUi(rate));
   const [fillScore, setfillScore] = useState(rate);
 
@@ -91,7 +91,7 @@ const Modal = () => {
       };
     }
 
-    dispatchContent({type: types.updateContent, payload: {...body} });
+    dispatchContent({ type: types.updateContent, payload: { ...body } });
     reFetch(url, requestOptions);
   }
 
@@ -108,7 +108,7 @@ const Modal = () => {
   }, [options.isAddContent, options.isUpdateContent]);
 
   useEffect(() => {
-    makeScoreUi(rate);
+    setscoreUi(makeScoreUi(rate));
   }, [rate]);
 
   return (
