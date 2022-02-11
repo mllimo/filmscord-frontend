@@ -2,9 +2,8 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 import * as DateParser from "../../helpers/date-parser";
 import OptionsContext from "../../contexts/optionsContext";
 import AuthContext from "../../contexts/authContext";
-import useForm from "../../hooks/useForm";
+import useFetch from "../../hooks/useFetch";
 import URL from "../../config/config";
-import { isCompositeComponent } from "react-dom/cjs/react-dom-test-utils.production.min";
 
 
 const Modal = () => {
@@ -12,6 +11,7 @@ const Modal = () => {
   const modelRef = useRef();
 
   const { user } = useContext(AuthContext);
+  const { body, setBody } = useState({});
   const { options, dispatch } = useContext(OptionsContext);
   const [title, setTitle] = useState("");
   const [rate, setRate] = useState(defaultRate);
@@ -20,13 +20,9 @@ const Modal = () => {
   const [id, setId] = useState(0);
 
 
-  const { form, handleInputChange, handleSubmit, changeUrl, changeOptions } = useForm(initFields(id), "/", {});
+  const { data, errors, reFetch } = useFetch("/", {});
   const [scoreUi, setscoreUi] = useState(makeScoreUi(rate));
   const [fillScore, setfillScore] = useState(rate);
-
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
 
   const mouseOnClickStartHandler = (index) => {
     let newScore = index + 1;
@@ -56,6 +52,46 @@ const Modal = () => {
     dispatch({ name: "updateContent", payload: null });
   };
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+    let url;
+    let requestOptions;
+
+    const body = {
+      id,
+      title,
+      rate,
+      comment,
+      data_watched: date
+    }
+
+    console.log(body);
+
+    if (options.isAdd) {
+      url = URL.BASE_URL + URL.API_USER + "/" + user.username + URL.CONTENT;
+      requestOptions = {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `${user.token}`
+        },
+        data: body
+      };
+    } else {
+      url = URL.BASE_URL + URL.API_USER + "/" + user.username + URL.CONTENT;
+      requestOptions = {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `${user.token}`
+        },
+        data: body
+      };
+    }
+
+    reFetch(url, requestOptions);
+  }
+
   useEffect(() => {
     if (options.isAddContent || options.isUpdateContent) {
       modelRef.current.classList.add("is-active");
@@ -66,45 +102,11 @@ const Modal = () => {
       setDate(DateParser.YYYYMMDD(auxDate));
       setId(options.addContent?.info?.title.id || options.updateContent?.info?.title.id || 0);
     }
-
-    if (options.isAdd) {
-      changeUrl(URL.BASE_URL + URL.API_USER + "/" + user.username + URL.CONTENT);
-      changeOptions({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `${user.token}`
-        }
-      });
-    } else {
-      changeUrl(URL.BASE_URL + URL.API_USER + "/" + user.username + URL.CONTENT);
-      changeOptions({
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `${user.token}`
-        }
-      });
-    }
   }, [options.isAddContent, options.isUpdateContent]);
 
   useEffect(() => {
     makeScoreUi(rate);
-    handleInputChange({ target: { name: "rate", value: rate } });
   }, [rate]);
-
-  useEffect(() => {
-    console.log(date);
-    handleInputChange({ target: { name: "date_watched", value: date } });
-  }, [date]);
-
-  useEffect(() => {
-    handleInputChange({ target: { name: "comment", value: comment } });
-  }, [comment]);
-
-  useEffect(() => {
-    handleInputChange({ target: { name: "id", value: id } });
-  }, [id]);
 
   return (
     <div className="modal" ref={modelRef}>
@@ -139,7 +141,7 @@ const Modal = () => {
             <div className="field is-inline-flex">
               <label className="label">Date watched:</label>
               <input className="ml-5" type="date" name="date_watched"
-                value={DateParser.YYYYMMDD(date)}
+                value={date}
                 onChange={(e) => {
                   setDate(DateParser.YYYYMMDD(e.target.value));
                 }}
@@ -163,7 +165,7 @@ const Modal = () => {
         </section>
         <footer className="modal-card-foot">
           <button className="button is-success"
-            onClick={handleSubmit}
+            onClick={submitHandler}
           >Save</button>
         </footer>
       </div>
