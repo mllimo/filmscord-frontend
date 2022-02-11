@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import OptionsContext from "../../contexts/optionsContext";
 
-const OptionMenu = ({ options }) => {
+const OptionMenu = () => {
+  const { dispatch } = useContext(OptionsContext);
   const backIcon = (<i className="fas fa-caret-square-left is-size-2"></i>);
   const addIcon = (<i className="fas fa-plus-square is-size-2"></i>);
 
@@ -8,7 +10,7 @@ const OptionMenu = ({ options }) => {
     <div>
       <div className="button is-flex is-justify-content-center is-full-width"
         name="isAdd"
-        onClick={() => options.dispatch({ name: "isAdd" })}
+        onClick={() => dispatch({ name: "isAdd" })}
       >
         {addIcon}
       </div>
@@ -20,7 +22,7 @@ const OptionMenu = ({ options }) => {
             <label className="label">Sort by</label>
             <div className="control">
               <div className="select is-fullwidth">
-                <select name="sortBy" onChange={(e) => options.dispatch({ name: e.target.name, payload: e.target.value })}>
+                <select name="sortBy" onChange={(e) => dispatch({ name: e.target.name, payload: e.target.value })}>
                   <option value="rating">Rating</option>
                   <option value="runtime">Runtime</option>
                 </select>
@@ -32,7 +34,7 @@ const OptionMenu = ({ options }) => {
             <label className="label">Order by</label>
             <div className="control">
               <div className="select is-fullwidth">
-                <select name="orderBy" onChange={(e) => options.dispatch({ name: e.target.name, payload: e.target.value })}>
+                <select name="orderBy" onChange={(e) => dispatch({ name: e.target.name, payload: e.target.value })}>
                   <option value="asc">Ascending</option>
                   <option value="desc">Descending</option>
                 </select>
@@ -49,7 +51,7 @@ const OptionMenu = ({ options }) => {
               name="search"
               type="text"
               placeholder="Spiderman"
-              onChange={(e) => options.dispatch({ name: e.target.name, payload: e.target.value })}
+              onChange={(e) => dispatch({ name: e.target.name, payload: e.target.value })}
             />
           </div>
         </div>

@@ -13,7 +13,7 @@ import OptionsContext from "../../contexts/optionsContext";
 const UserScreen = () => {
   // Contexts
   const { user } = useContext(AuthContext);
-  const options = useContext(OptionsContext);
+  const {options, optionsDispatch: dispatch} = useContext(OptionsContext);
   const contentContext = useContext(ContentContext);
 
   // States
@@ -34,8 +34,8 @@ const UserScreen = () => {
         contentContext.dispatch({ type: types.update, payload: data.contents });
         contentContext.dispatch({
           type: types.sort, payload: {
-            by: options.options.sortBy,
-            in: options.options.orderBy
+            by: options.sortBy,
+            in: options.orderBy
           }
         });
       }
@@ -61,40 +61,41 @@ const UserScreen = () => {
   useEffect(() => {
     contentContext.dispatch({
       type: types.sort, payload: {
-        by: options.options.sortBy,
-        in: options.options.orderBy
+        by: options.sortBy,
+        in: options.orderBy
       }
     });
     setChange(!change);
-  }, [options.options.sortBy, options.options.orderBy]);
+  }, [options.sortBy, options.orderBy]);
 
   // Buscar contenido || memo?
   useEffect(() => {
-    if (!options.options.isAdd) {
-      const regex = new RegExp(options.options.search.toLowerCase());
+    if (!options.isAdd) {
+      const regex = new RegExp(options.search.toLowerCase());
       const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
       setActualContent(filtered);
-    } else if (options.options.isAdd) {
-      if (options.options.search !== "") {
-        setSearchUrl(URL.BASE_URL + URL.API_SEARCH + `?title=${options.options.search}&page=1`);
+    } else if (options.isAdd) {
+      if (options.search !== "") {
+        setSearchUrl(URL.BASE_URL + URL.API_SEARCH + `?title=${options.search}&page=1`);
         reFetchAdd(searchUrl, searchRequestOptions());
       }
     }
-  }, [options.options.search]);
+  }, [options.search]);
 
   // Caso de añadir contenido
   useEffect(() => {
-    if (options.options.isAdd) {
+    console.log(options);
+    if (options.isAdd) {
       setRequestOptions(searchRequestOptions());
       setActualContent([])
     } else {
       setUrl(URL.BASE_URL + URL.API_USER + "/" + user.username);
       setRequestOptions(contentRequestOptions(user.token));
     }
-  }, [options.options.isAdd]);
+  }, [options.isAdd]);
 
   useEffect(() => {
-    if (options.options.isAdd) {
+    if (options.isAdd) {
       reFetchAdd(url, requestOptions);
     } else {
       reFetch(url, requestOptions);
@@ -108,7 +109,7 @@ const UserScreen = () => {
       <div className="columns">
 
         <div className="column is-one-fifth mt-5 ml-5">
-          <OptionMenu options={options} />
+          <OptionMenu />
         </div>
 
         <div className="column is-four-fifths mt-5 pr-5">

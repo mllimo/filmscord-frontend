@@ -12,6 +12,12 @@ const optionReducer = (state = {}, action) => {
       return { ...state, addContent: action.payload };
     case "updateContent":
       return { ...state, updateContent: action.payload };
+    case "sortBy":
+      return { ...state, sortBy: action.payload };
+    case "orderBy":
+      return { ...state, orderBy: action.payload };
+    case "search":
+      return { ...state, search: action.payload };
     default:
       return state;
 
