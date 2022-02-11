@@ -4,6 +4,8 @@ import OptionsContext from "../../contexts/optionsContext";
 import AuthContext from "../../contexts/authContext";
 import useFetch from "../../hooks/useFetch";
 import URL from "../../config/config";
+import types from "../../types/types";
+import ContentContext from "../../contexts/contentContext";
 
 
 const Modal = () => {
@@ -11,7 +13,7 @@ const Modal = () => {
   const modelRef = useRef();
 
   const { user } = useContext(AuthContext);
-  const { body, setBody } = useState({});
+  const { dispatch: dispatchContent} = useContext(ContentContext);
   const { options, dispatch } = useContext(OptionsContext);
   const [title, setTitle] = useState("");
   const [rate, setRate] = useState(defaultRate);
@@ -89,6 +91,7 @@ const Modal = () => {
       };
     }
 
+    dispatchContent({type: types.updateContent, payload: {...body} });
     reFetch(url, requestOptions);
   }
 

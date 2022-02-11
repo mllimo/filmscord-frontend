@@ -13,8 +13,8 @@ import OptionsContext from "../../contexts/optionsContext";
 const UserScreen = () => {
   // Contexts
   const { user } = useContext(AuthContext);
-  const {options, optionsDispatch: dispatch} = useContext(OptionsContext);
-  const contentContext = useContext(ContentContext);
+  const { options } = useContext(OptionsContext);
+  const { contents, dispatch: contentDispatch} = useContext(ContentContext);
 
   // States
   const [requestOptions, setRequestOptions] = useState(contentRequestOptions(user.token));
@@ -31,8 +31,8 @@ const UserScreen = () => {
   useEffect(() => {
     if (data) {
       if (!errors) {
-        contentContext.dispatch({ type: types.update, payload: data.contents });
-        contentContext.dispatch({
+        contentDispatch({ type: types.update, payload: data.contents });
+        contentDispatch({
           type: types.sort, payload: {
             by: options.sortBy,
             in: options.orderBy
@@ -47,19 +47,26 @@ const UserScreen = () => {
     if (dataAdd) {
       if (!errorsAdd) {
         const formated = formatSearchData(dataAdd.contents);
-        contentContext.dispatch({ type: types.update, payload: formated });
+        contentDispatch({ type: types.update, payload: formated });
       }
     }
   }, [dataAdd]);
 
   // Actualizar el contenido
   useEffect(() => {
-    setActualContent(contentContext.contents);
-  }, [contentContext.contents]);
+    console.log('actualizando');
+    contentDispatch({
+      type: types.sort, payload: {
+        by: options.sortBy,
+        in: options.orderBy
+      }
+    });
+    setActualContent(contents);
+  }, [contents]);
 
   // Ordenar el contenido
   useEffect(() => {
-    contentContext.dispatch({
+    contentDispatch({
       type: types.sort, payload: {
         by: options.sortBy,
         in: options.orderBy
@@ -72,7 +79,7 @@ const UserScreen = () => {
   useEffect(() => {
     if (!options.isAdd) {
       const regex = new RegExp(options.search.toLowerCase());
-      const filtered = contentContext.contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
+      const filtered = contents.filter((content) => { return content.info.title.text.toLowerCase().match(regex) });
       setActualContent(filtered);
     } else if (options.isAdd) {
       if (options.search !== "") {

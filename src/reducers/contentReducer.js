@@ -11,6 +11,16 @@ const contentReducer = (state = [], action) => {
     case types.update:
       return action.payload;
 
+    case types.updateContent:
+      return state.map(item => {
+        if (item.info.title.id === action.payload.id) {
+          item.rate = action.payload.rate;
+          item.comment = action.payload.comment;
+          item.data_watched = action.payload.data_watched;
+        }
+        return item;
+      });
+
     case types.sort:
       if (action.payload.by === types.rating) {
         if (action.payload.in === types.asc) {

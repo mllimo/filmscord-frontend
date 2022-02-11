@@ -4,6 +4,7 @@ const types = {
   add: 'add',
   remove: 'remove',
   update: 'update',
+  updateContent: 'updateContent',
   sort: 'sort',
   asc: 'asc',
   desc: 'desc',
