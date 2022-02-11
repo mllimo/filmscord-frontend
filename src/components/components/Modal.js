@@ -62,7 +62,8 @@ const Modal = () => {
       setTitle(options.addContent?.info?.title.text || options.updateContent?.info?.title.text || "");
       setRate((options.addContent?.rate || options.updateContent?.rate) || defaultRate);
       setComment(options.addContent?.comment || options.updateContent?.comment || "");
-      setDate(options.addContent?.date_watched || options.updateContent?.date_watched || DateParser.YYYYMMDD(new Date()));
+      const auxDate = options.addContent?.date_watched || options.updateContent?.date_watched || DateParser.YYYYMMDD(new Date());
+      setDate(DateParser.YYYYMMDD(auxDate));
       setId(options.addContent?.info?.title.id || options.updateContent?.info?.title.id || 0);
     }
 
@@ -93,6 +94,7 @@ const Modal = () => {
   }, [rate]);
 
   useEffect(() => {
+    console.log(date);
     handleInputChange({ target: { name: "date_watched", value: date } });
   }, [date]);
 
@@ -139,7 +141,7 @@ const Modal = () => {
               <input className="ml-5" type="date" name="date_watched"
                 value={DateParser.YYYYMMDD(date)}
                 onChange={(e) => {
-                  setDate(e.target.value);
+                  setDate(DateParser.YYYYMMDD(e.target.value));
                 }}
               ></input>
             </div>

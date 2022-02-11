@@ -35,6 +35,7 @@ const useForm = (fields, toSend, fetchOptions) => {
     };
 
     console.log('request', request);
+    console.log('url', url);
     fetch(url, request)
       .then(async (res) => {
         const body = (await res.json());
@@ -42,11 +43,13 @@ const useForm = (fields, toSend, fetchOptions) => {
         return resObj;
       })
       .then((res) => {
+        console.log('res', res);
         setResponse(res);
         setIsLoading(false);
         setIsSuccess(true);
       })
       .catch((err) => {
+        console.log('err', err);
         setResponse(err);
         setIsLoading(false);
         setIsSuccess(false);
