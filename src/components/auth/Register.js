@@ -7,7 +7,7 @@ import URLS from "../../config/config";
 import types from "../../types/types";
 
 const Register = () => {
-  const userContext = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const email_ref = useRef();
@@ -32,9 +32,14 @@ const Register = () => {
           token: response.body.token,
         }
       };
-      userContext.dispatch(action);
+      dispatch(action);
     }
   }
+
+  useEffect(() => {
+    if (user.username != '' && user.logged)
+      navigate("/user/" + user.username, { replace: true });
+  }, [user.username]);
 
   // Observamos si el usuario se ha podido restistrar
   useEffect(() => {
@@ -42,7 +47,6 @@ const Register = () => {
     if (isSuccess) {
       if (response.status === 200) {
         container_ref.current.classList.add("animate__bounceOutDown");
-        navigate("/user/" + userContext.user.username, { replace: true });
       } else if (response.status === 422) {
         for (const error of response.body.errors) {
           if (error.param === "email") {

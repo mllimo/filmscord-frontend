@@ -30,7 +30,8 @@ const Filmscord = () => {
 
   useEffect(() => {
     if (!userReducer[0]) return;
-    localStorage.setItem("user", JSON.stringify(userReducer[0]));
+    if (!userReducer[0].logged) localStorage.removeItem('user');
+    else localStorage.setItem("user", JSON.stringify(userReducer[0]));
   }, [userReducer[0]]);
 
   return (

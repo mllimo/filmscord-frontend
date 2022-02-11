@@ -6,14 +6,14 @@ import AuthContext from "../../contexts/authContext";
 import types from "../../types/types";
 
 const Header = () => {
-  const userContext = useContext(AuthContext);
+  const {user, dispatch} = useContext(AuthContext);
 
   const handleClick = (e) => {
     e.preventDefault();
-    if (userContext.user.logged) {
-      userContext.dispatch({
+    if (user.logged) {
+        dispatch({
         type: types.logout,
-        payload: userContext.user,
+        payload: user,
       });
     }
   };
@@ -32,7 +32,7 @@ const Header = () => {
           <DropDownMenu className="pr-6">
             <DropDownItem> <Link to="about">About</Link> </DropDownItem>
             {
-              userContext.user.logged 
+              user.logged 
               ? <DropDownItem> <Link to="/" onClick={handleClick}>Logout</Link> </DropDownItem> 
               : <DropDownItem> <Link to="/login"  onClick={handleClick}>Login</Link> </DropDownItem>
             }

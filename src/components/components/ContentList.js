@@ -6,17 +6,8 @@ import Content from "./Content";
 import Modal from "./Modal";
 
 const ContentList = ({ contents }) => {
-  const { user } = useContext(AuthContext);
   const options = useContext(OptionsContext);
   const [forceUpdate, setForceUpdate] = useState(false);
-
-  const reqOptions = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${user.token}`
-    },
-  };
 
   useEffect(() => {
     setForceUpdate(!forceUpdate);
@@ -35,9 +26,6 @@ const ContentList = ({ contents }) => {
     </div >
   );
 }
-
-const updateUrl = URL.BASE_URL + URL.API_USER_CONTENT;
-const addUrl = URL.BASE_URL + URL.USER_CONTENT;
 
 const emptyList = (
   <div className="container">

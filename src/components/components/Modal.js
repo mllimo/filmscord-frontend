@@ -12,19 +12,23 @@ const Modal = () => {
   const defaultRate = 0;
   const modelRef = useRef();
 
-  const { user } = useContext(AuthContext);
+  // Context
   const { dispatch: dispatchContent } = useContext(ContentContext);
   const { options, dispatch } = useContext(OptionsContext);
-  const [title, setTitle] = useState("");
+  const { user } = useContext(AuthContext);
+
+  // States
+  const [scoreUi, setscoreUi] = useState(makeScoreUi(0));
+  const [fillScore, setfillScore] = useState(0);
+  const [date, setDate] = useState("1999-12-14");
   const [rate, setRate] = useState(defaultRate);
   const [comment, setComment] = useState("");
-  const [date, setDate] = useState("1999-12-14");
+  const [title, setTitle] = useState("");
   const [id, setId] = useState(0);
+  const [category, setCategory] = useState("");
 
-
+  // Custom Hooks
   const { reFetch } = useFetch("/", {});
-  const [scoreUi, setscoreUi] = useState(makeScoreUi(rate));
-  const [fillScore, setfillScore] = useState(rate);
 
   const mouseOnClickStartHandler = (index) => {
     let newScore = index + 1;
@@ -64,7 +68,8 @@ const Modal = () => {
       title,
       rate,
       comment,
-      data_watched: date
+      date_watched: date,
+      category
     }
 
     console.log(body);
@@ -97,13 +102,14 @@ const Modal = () => {
 
   useEffect(() => {
     if (options.isAddContent || options.isUpdateContent) {
-      modelRef.current.classList.add("is-active");
+      const auxDate = options.addContent?.date_watched || options.updateContent?.date_watched || DateParser.YYYYMMDD(new Date());
+      setDate(DateParser.YYYYMMDD(auxDate));
+      setCategory(options.addContent?.info?.category || options.updateContent?.info?.category || "");
       setTitle(options.addContent?.info?.title.text || options.updateContent?.info?.title.text || "");
       setRate((options.addContent?.rate || options.updateContent?.rate) || defaultRate);
       setComment(options.addContent?.comment || options.updateContent?.comment || "");
-      const auxDate = options.addContent?.date_watched || options.updateContent?.date_watched || DateParser.YYYYMMDD(new Date());
-      setDate(DateParser.YYYYMMDD(auxDate));
       setId(options.addContent?.info?.title.id || options.updateContent?.info?.title.id || 0);
+      modelRef.current.classList.add("is-active");
     }
   }, [options.isAddContent, options.isUpdateContent]);
 
