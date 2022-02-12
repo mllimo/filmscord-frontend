@@ -100,7 +100,7 @@ const Register = () => {
                 ref={username_ref}
                 name="username"
                 type="text"
-                placeholder="e.g. alex99"
+                placeholder="e.g. antonio99"
                 onChange={handleInputChange}
               />
             </div>
@@ -113,7 +113,7 @@ const Register = () => {
                 ref={email_ref}
                 name="email"
                 type="email"
-                placeholder="e.g. alex@example.com"
+                placeholder="e.g. antonio@example.com"
                 onChange={handleInputChange}
               />
             </div>

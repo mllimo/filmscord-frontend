@@ -11,13 +11,15 @@ const Header = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    if (user.logged) {
+    let ref = e.target.id;
+    if (user.logged && e.target.id === "logout") {
       dispatch({
         type: types.logout,
         payload: user,
       });
+      ref = "/";
     }
-    navigate("/", { replace: true });
+    navigate(ref, { replace: true });
   };
 
   return (
@@ -26,17 +28,17 @@ const Header = () => {
       </div>
 
       <div className="column has-text-centered has-text-white p-0 mt-3">
-        <h1 className="text-font-fredoka is-size-1">FILMSCORD</h1>
+        <h1 className="text-font-fredoka is-size-1 is-clickable" id="/"  onClick={handleClick}>FILMSCORD</h1>
       </div>
 
       <div
         className="column is-flex is-align-items-center is-justify-content-end has-text-white is-size-4 mt-3">
         <DropDownMenu className="pr-6">
-          <DropDownItem> <div className="is-clickable has-text-link" value="/about">About</div> </DropDownItem>
+          <DropDownItem> <div className="is-clickable has-text-link" id="/about" onClick={handleClick} >About</div> </DropDownItem>
           {
             user.logged
-              ? <DropDownItem> <div className="is-clickable has-text-link" value={"/"} onClick={handleClick}>Logout</div> </DropDownItem>
-              : <DropDownItem> <div className="is-clickable has-text-link" value={"/login"}  onClick={handleClick}>Login </div> </DropDownItem>
+              ? <DropDownItem> <div className="is-clickable has-text-link" id={"logout"}  onClick={handleClick}>Logout</div> </DropDownItem>
+              : <DropDownItem> <div className="is-clickable has-text-link" id={"/"}  onClick={handleClick}>Login </div> </DropDownItem>
           }
         </DropDownMenu>
       </div>

@@ -85,7 +85,7 @@ const Login = () => {
                 ref={email_username_ref}
                 name="email_username"
                 type="email"
-                placeholder="e.g. alex@example.com or alex99"
+                placeholder="e.g. antonio@example.com or antonio99"
                 onChange={handleInputChange}
               />
             </div>
