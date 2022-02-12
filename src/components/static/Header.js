@@ -1,21 +1,23 @@
-import React, { useContext, useEffect} from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import DropDownItem from "../components/DropdownItem";
 import DropDownMenu from "../components/DropdownMenu";
 import AuthContext from "../../contexts/authContext";
 import types from "../../types/types";
 
 const Header = () => {
-  const {user, dispatch} = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleClick = (e) => {
     e.preventDefault();
     if (user.logged) {
-        dispatch({
+      dispatch({
         type: types.logout,
         payload: user,
       });
     }
+    navigate("/", { replace: true });
   };
 
   return (
@@ -29,14 +31,14 @@ const Header = () => {
 
       <div
         className="column is-flex is-align-items-center is-justify-content-end has-text-white is-size-4 mt-3">
-          <DropDownMenu className="pr-6">
-            <DropDownItem> <Link to="about">About</Link> </DropDownItem>
-            {
-              user.logged 
-              ? <DropDownItem> <Link to="/" onClick={handleClick}>Logout</Link> </DropDownItem> 
-              : <DropDownItem> <Link to="/login"  onClick={handleClick}>Login</Link> </DropDownItem>
-            }
-          </DropDownMenu>
+        <DropDownMenu className="pr-6">
+          <DropDownItem> <div className="is-clickable has-text-link" value="/about">About</div> </DropDownItem>
+          {
+            user.logged
+              ? <DropDownItem> <div className="is-clickable has-text-link" value={"/"} onClick={handleClick}>Logout</div> </DropDownItem>
+              : <DropDownItem> <div className="is-clickable has-text-link" value={"/login"}  onClick={handleClick}>Login </div> </DropDownItem>
+          }
+        </DropDownMenu>
       </div>
 
     </div>

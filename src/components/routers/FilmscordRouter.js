@@ -13,21 +13,21 @@ const FilmscordRouter = () => {
       <Header />
       <Routes>
 
-        <Route path="/about" element={<h1>TODO</h1>} />
+        <Route exact path="/about" element={<h1>TODO</h1>} />
 
-        <Route path="/" element={
+        <Route exact path="/" element={
           <PublicRoute>
             <Login />
           </PublicRoute>
         } />
 
-        <Route path="/signup" element={
+        <Route exact path="/signup" element={
           <PublicRoute>
             <Register />
           </PublicRoute>
         } />
 
-        <Route path="/user/:username" element={
+        <Route exact path="/user/:username" element={
           <PrivateRoute>
             <UserScreen />
           </PrivateRoute>
